@@ -8,5 +8,5 @@ export async function GET() {
   if (!session.userId) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
-  return NextResponse.json({ id: session.userId, username: process.env.LOGIN_USERNAME });
+  return NextResponse.json({ id: session.userId });
 }

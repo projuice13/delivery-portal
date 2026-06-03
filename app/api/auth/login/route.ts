@@ -7,12 +7,9 @@ import { auditLogs } from '@/lib/schema';
 
 export async function POST(request: NextRequest) {
   const body = await request.json();
-  const { username, password, rememberMe = false } = body;
+  const { password, rememberMe = false } = body;
 
-  if (
-    username !== process.env.LOGIN_USERNAME ||
-    password !== process.env.LOGIN_PASSWORD
-  ) {
+  if (password !== process.env.LOGIN_PASSWORD) {
     return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
   }
 
@@ -30,7 +27,7 @@ export async function POST(request: NextRequest) {
       id: crypto.randomUUID(),
       userId: 'driver-session',
       action: 'login',
-      details: { username },
+      details: {},
       ipAddress: ip,
     })
     .catch(() => {});

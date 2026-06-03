@@ -10,7 +10,6 @@ interface LoginFormProps {
 }
 
 export function LoginForm({ onSuccess }: LoginFormProps) {
-  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState('');
@@ -25,7 +24,7 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ username, password, rememberMe }),
+        body: JSON.stringify({ password, rememberMe }),
       });
       if (!res.ok) {
         setError('Invalid username or password');
@@ -48,17 +47,6 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-1">
-            <Label htmlFor="username">Username</Label>
-            <Input
-              id="username"
-              type="text"
-              autoComplete="username"
-              value={username}
-              onChange={e => setUsername(e.target.value)}
-              required
-            />
-          </div>
           <div className="space-y-1">
             <Label htmlFor="password">Password</Label>
             <Input
