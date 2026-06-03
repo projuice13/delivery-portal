@@ -29,6 +29,11 @@ export async function lookupPostcode(postcode: string): Promise<DeliveryData | n
   const importRows = importRes.data.values ?? [];
   const libraryRows = libraryRes.data.values ?? [];
 
+  console.log(`[lookup] normalised="${normalised}" importRows=${importRows.length} libraryRows=${libraryRows.length}`);
+  if (libraryRows.length > 1) {
+    console.log(`[lookup] library row[1] sample:`, JSON.stringify(libraryRows[1]?.slice(0, 8)));
+  }
+
   const mergedMap = new Map<string, DeliveryEntry>();
 
   // Import tab — no header row, data from index 0
