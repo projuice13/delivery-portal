@@ -1,17 +1,6 @@
 'use client';
 
 import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 
 const DRIVERS = ['Andy', 'Dan', 'Ian', 'Karol', 'Lee', 'Marlon', 'Peter', 'Rafal', 'Shaun'];
 const MAX_FILE_BYTES = 10 * 1024 * 1024;
@@ -82,12 +71,12 @@ export function DriverNotesForm({ postcode, onClose }: DriverNotesFormProps) {
 
   if (success) {
     return (
-      <div className="rounded-xl border border-green-200 bg-green-50 p-4 text-center space-y-2">
-        <p className="font-semibold text-green-800">Note submitted successfully!</p>
+      <div className="rounded-xl bg-green-50 border border-green-100 p-4 text-center space-y-2">
+        <p className="font-medium text-green-800">Note submitted successfully!</p>
         {onClose && (
-          <Button variant="outline" size="sm" onClick={onClose}>
+          <button onClick={onClose} className="text-sm text-green-700 underline">
             Close
-          </Button>
+          </button>
         )}
       </div>
     );
@@ -95,66 +84,80 @@ export function DriverNotesForm({ postcode, onClose }: DriverNotesFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="space-y-1">
-        <Label>Driver name *</Label>
-        <Select value={driverName} onValueChange={v => setDriverName(v ?? '')}>
-          <SelectTrigger>
-            <SelectValue placeholder="Select driver…" />
-          </SelectTrigger>
-          <SelectContent>
-            {DRIVERS.map(d => (
-              <SelectItem key={d} value={d}>
-                {d}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1.5">
+          Driver name <span className="text-red-500">*</span>
+        </label>
+        <select
+          value={driverName}
+          onChange={e => setDriverName(e.target.value)}
+          required
+          className="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition appearance-none"
+        >
+          <option value="">Please select</option>
+          {DRIVERS.map(d => (
+            <option key={d} value={d}>{d}</option>
+          ))}
+        </select>
       </div>
 
-      <div className="space-y-1">
-        <Label htmlFor="w3w">What3Words (optional)</Label>
-        <Input
-          id="w3w"
-          placeholder="e.g. filled.count.soap"
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1.5">
+          What3Words <span className="text-gray-400 font-normal">(optional)</span>
+        </label>
+        <input
+          type="text"
+          placeholder="Enter What3Words if applicable"
           value={what3words}
           onChange={e => setWhat3words(e.target.value)}
+          className="w-full h-10 rounded-lg border border-gray-200 px-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition"
         />
       </div>
 
-      <div className="space-y-1">
-        <Label htmlFor="notes">Notes *</Label>
-        <Textarea
-          id="notes"
-          rows={4}
-          placeholder="Enter delivery notes…"
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1.5">
+          Additional driver notes <span className="text-red-500">*</span>
+        </label>
+        <textarea
+          rows={5}
+          placeholder="Enter any additional notes or observations about this delivery..."
           value={notes}
           onChange={e => setNotes(e.target.value)}
           required
+          className="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition resize-none"
         />
       </div>
 
-      <div className="space-y-1">
-        <Label htmlFor="file">Attachment (optional, max 10MB)</Label>
-        <Input id="file" type="file" onChange={handleFile} />
-        {fileError && <p className="text-sm text-red-600">{fileError}</p>}
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1.5">
+          Attachment <span className="text-gray-400 font-normal">(optional, max 10MB)</span>
+        </label>
+        <input
+          type="file"
+          onChange={handleFile}
+          className="w-full text-sm text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200 transition border border-gray-200 rounded-lg"
+        />
+        {fileError && <p className="mt-1 text-xs text-red-600">{fileError}</p>}
       </div>
 
-      {error && <p className="text-sm text-red-600">{error}</p>}
+      {error && <p className="text-sm text-red-600 bg-red-50 rounded-lg px-3 py-2">{error}</p>}
 
-      <div className="flex gap-2">
-        <Button
-          type="submit"
-          disabled={submitting || !driverName || !notes}
-          className="bg-green-700 hover:bg-green-800"
-        >
-          {submitting ? 'Submitting…' : 'Submit note'}
-        </Button>
-        {onClose && (
-          <Button type="button" variant="outline" onClick={onClose}>
-            Cancel
-          </Button>
+      <button
+        type="submit"
+        disabled={submitting || !driverName || !notes}
+        className="w-full h-10 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-sm font-medium rounded-lg transition flex items-center justify-center gap-2"
+      >
+        {submitting ? (
+          'Submitting…'
+        ) : (
+          <>
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+            </svg>
+            Submit Notes
+          </>
         )}
-      </div>
+      </button>
     </form>
   );
 }

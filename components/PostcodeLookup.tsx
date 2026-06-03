@@ -2,8 +2,6 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 
 interface PostcodeLookupProps {
   onLookup: (postcodes: string[]) => void;
@@ -64,90 +62,96 @@ export function PostcodeLookup({ onLookup, onLogout, loading }: PostcodeLookupPr
       .filter(Boolean);
     if (!postcodes.length) return;
 
-    // Update history
     const updated = [
       ...postcodes,
       ...recentSearches.filter(p => !postcodes.includes(p)),
     ].slice(0, MAX_HISTORY);
     setRecentSearches(updated);
-    try {
-      localStorage.setItem(HISTORY_KEY, JSON.stringify(updated));
-    } catch {}
+    try { localStorage.setItem(HISTORY_KEY, JSON.stringify(updated)); } catch {}
 
     onLookup(postcodes);
   }
 
-  function useRecent(postcode: string) {
-    setInput(postcode);
-    onLookup([postcode]);
-  }
-
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
-      <header className="bg-white border-b px-4 py-3 flex items-center justify-between">
-        <div className="text-xl font-bold text-green-700">ProJuice</div>
-        <Button variant="outline" size="sm" onClick={onLogout}>
-          Log out
-        </Button>
+    <div className="min-h-screen bg-[#f5f6f8]">
+      <header className="bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between">
+        <ProJuiceLogo />
+        <button
+          onClick={onLogout}
+          className="text-gray-400 hover:text-gray-600 transition"
+          title="Log out"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h6a2 2 0 012 2v1" />
+          </svg>
+        </button>
       </header>
 
-      <main className="flex-1 flex flex-col items-center justify-center px-4 py-12">
-        <div className="w-full max-w-md space-y-6">
-          <h1 className="text-2xl font-bold text-center text-gray-800">
-            Delivery Instructions Lookup
-          </h1>
+      <main className="max-w-xl mx-auto px-4 py-12 space-y-6">
+        <div>
+          <h1 className="text-2xl font-semibold text-gray-900 mb-1">Delivery Lookup</h1>
+          <p className="text-sm text-gray-500">Search by postcode to view delivery instructions</p>
+        </div>
 
-          <form onSubmit={handleSearch} className="space-y-3 relative">
-            <Input
-              ref={inputRef}
-              placeholder="Enter postcode(s) — comma or newline separated"
-              value={input}
-              onChange={e => updateInput(e.target.value)}
-              onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
-              onFocus={() => suggestions.length > 0 && setShowSuggestions(true)}
-              className="text-base"
-            />
-            {showSuggestions && (
-              <div className="absolute z-10 w-full bg-white border rounded-lg shadow-lg mt-1">
-                {suggestions.map(s => (
-                  <button
-                    key={s}
-                    type="button"
-                    className="w-full text-left px-4 py-2 hover:bg-gray-100 text-sm font-mono"
-                    onMouseDown={() => selectSuggestion(s)}
-                  >
-                    {s}
-                  </button>
-                ))}
-              </div>
-            )}
-            <Button
-              type="submit"
-              className="w-full bg-green-700 hover:bg-green-800"
-              disabled={loading || !input.trim()}
-            >
-              {loading ? 'Looking up…' : 'Look up delivery instructions'}
-            </Button>
-          </form>
-
-          {recentSearches.length > 0 && (
-            <div className="space-y-2">
-              <p className="text-xs text-gray-500 uppercase tracking-wide">Recent searches</p>
-              <div className="flex flex-wrap gap-2">
-                {recentSearches.map(pc => (
-                  <button
-                    key={pc}
-                    onClick={() => useRecent(pc)}
-                    className="text-xs bg-white border rounded-full px-3 py-1 hover:bg-gray-50 font-mono text-gray-700"
-                  >
-                    {pc}
-                  </button>
-                ))}
-              </div>
+        <form onSubmit={handleSearch} className="relative space-y-3">
+          <input
+            ref={inputRef}
+            placeholder="Enter postcode(s) — comma or newline separated"
+            value={input}
+            onChange={e => updateInput(e.target.value)}
+            onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
+            onFocus={() => suggestions.length > 0 && setShowSuggestions(true)}
+            className="w-full h-11 rounded-xl border border-gray-200 bg-white px-4 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition"
+          />
+          {showSuggestions && (
+            <div className="absolute z-10 w-full bg-white border border-gray-100 rounded-xl shadow-lg mt-1 overflow-hidden">
+              {suggestions.map(s => (
+                <button
+                  key={s}
+                  type="button"
+                  className="w-full text-left px-4 py-2.5 hover:bg-gray-50 text-sm font-mono text-gray-700"
+                  onMouseDown={() => selectSuggestion(s)}
+                >
+                  {s}
+                </button>
+              ))}
             </div>
           )}
-        </div>
+          <button
+            type="submit"
+            disabled={loading || !input.trim()}
+            className="w-full h-11 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-sm font-medium rounded-xl transition"
+          >
+            {loading ? 'Looking up…' : 'Look up instructions'}
+          </button>
+        </form>
+
+        {recentSearches.length > 0 && (
+          <div className="space-y-2">
+            <p className="text-xs font-medium text-gray-400 uppercase tracking-wider">Recent searches</p>
+            <div className="flex flex-wrap gap-2">
+              {recentSearches.map(pc => (
+                <button
+                  key={pc}
+                  onClick={() => { setInput(pc); onLookup([pc]); }}
+                  className="text-xs bg-white border border-gray-200 rounded-lg px-3 py-1.5 hover:border-blue-300 hover:text-blue-600 font-mono text-gray-600 transition"
+                >
+                  {pc}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
       </main>
+    </div>
+  );
+}
+
+function ProJuiceLogo() {
+  return (
+    <div className="inline-flex items-center gap-0.5">
+      <span className="text-xl font-bold text-gray-900">Pro</span>
+      <span className="text-xl font-bold text-orange-500">Juice</span>
     </div>
   );
 }
