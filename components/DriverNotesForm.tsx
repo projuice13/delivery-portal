@@ -145,7 +145,7 @@ export function DriverNotesForm({ postcode, onClose }: DriverNotesFormProps) {
       <button
         type="submit"
         disabled={submitting || !driverName || !notes}
-        className="w-full h-10 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-sm font-medium rounded-[3px] transition flex items-center justify-center gap-2 cursor-pointer"
+        className="w-full h-10 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-[3px] transition flex items-center justify-center gap-2 cursor-pointer"
       >
         {submitting ? (
           'Submitting…'

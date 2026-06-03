@@ -110,10 +110,10 @@ function EntryCard({
             <div className="space-y-3">
               {entry.instructions.map((inst, i) => (
                 <div key={i}>
-                  <span className={`inline-block text-xs font-medium px-2 py-0.5 rounded-[3px] mb-1.5 ${
+                  <span className={`inline-block text-xs font-medium px-2 py-0.5 rounded-[3px] mb-1.5 border bg-transparent ${
                     inst.source === 'import'
-                      ? 'bg-blue-50 text-blue-700'
-                      : 'bg-purple-50 text-purple-700'
+                      ? 'text-blue-600 border-blue-600'
+                      : 'text-purple-600 border-purple-600'
                   }`}>
                     {inst.label}
                   </span>

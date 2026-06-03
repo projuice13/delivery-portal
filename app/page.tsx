@@ -40,9 +40,10 @@ export default function Home() {
     }
   }, [authLoading, user, view]);
 
-  async function handleLogout() {
-    await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
+  function handleLogout() {
+    // Switch view immediately so the button always feels responsive
     setView('login');
+    fetch('/api/auth/logout', { method: 'POST', credentials: 'include' }).catch(() => {});
     refetchUser();
   }
 
