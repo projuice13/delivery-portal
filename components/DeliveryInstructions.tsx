@@ -15,18 +15,18 @@ export function DeliveryInstructions({ data, onBack }: DeliveryInstructionsProps
   const [lightboxUrl, setLightboxUrl] = useState<string | null>(null);
 
   return (
-    <div className="min-h-screen bg-[#f5f6f8]">
+    <div className="min-h-screen bg-white flex flex-col">
       {lightboxUrl && (
         <div
           className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4 cursor-pointer"
           onClick={() => setLightboxUrl(null)}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={lightboxUrl} alt="Full size" className="max-w-full max-h-full object-contain rounded-lg" />
+          <img src={lightboxUrl} alt="Full size" className="max-w-full max-h-full object-contain rounded-[3px]" />
         </div>
       )}
 
-      <header className="bg-white border-b border-gray-100 px-6 py-3 flex items-center justify-between print:hidden">
+      <header className="bg-white border-b border-gray-200 px-6 py-3 flex items-center justify-between print:hidden">
         <button
           onClick={onBack}
           className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-800 transition cursor-pointer"
@@ -45,10 +45,12 @@ export function DeliveryInstructions({ data, onBack }: DeliveryInstructionsProps
         </button>
       </header>
 
-      <main className="max-w-2xl mx-auto px-4 py-6 space-y-4">
-        {data.entries.map((entry, i) => (
-          <EntryCard key={i} entry={entry} postcode={data.postcode} onImageClick={setLightboxUrl} />
-        ))}
+      <main className="flex-1 flex items-start justify-center px-4 py-8">
+        <div className="w-full max-w-2xl space-y-4">
+          {data.entries.map((entry, i) => (
+            <EntryCard key={i} entry={entry} postcode={data.postcode} onImageClick={setLightboxUrl} />
+          ))}
+        </div>
       </main>
     </div>
   );
@@ -66,8 +68,8 @@ function EntryCard({
   const [showNotes, setShowNotes] = useState(false);
 
   return (
-    <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
-      <div className="px-6 pt-6 pb-4 border-b border-gray-50">
+    <div className="bg-gray-50 border border-gray-200 rounded-[3px] overflow-hidden">
+      <div className="px-6 pt-6 pb-4 border-b border-gray-200">
         <p className="text-2xl font-bold text-gray-900 mb-2">{formatPostcode(postcode)}</p>
         <p className="text-base font-medium text-gray-600">{entry.companyName}</p>
       </div>
@@ -108,7 +110,7 @@ function EntryCard({
             <div className="space-y-3">
               {entry.instructions.map((inst, i) => (
                 <div key={i}>
-                  <span className={`inline-block text-xs font-medium px-2 py-0.5 rounded mb-1.5 ${
+                  <span className={`inline-block text-xs font-medium px-2 py-0.5 rounded-[3px] mb-1.5 ${
                     inst.source === 'import'
                       ? 'bg-blue-50 text-blue-700'
                       : 'bg-purple-50 text-purple-700'
@@ -131,7 +133,7 @@ function EntryCard({
                   <img
                     src={url}
                     alt={`Photo ${i + 1}`}
-                    className="h-24 w-24 object-cover rounded-lg border border-gray-100 hover:opacity-80 transition"
+                    className="h-24 w-24 object-cover rounded-[3px] border border-gray-200 hover:opacity-80 transition"
                   />
                 </button>
               ))}
@@ -139,11 +141,11 @@ function EntryCard({
           </Section>
         )}
 
-        {/* Toggle driver note — full width button */}
-        <div className="pt-2 border-t border-gray-100">
+        {/* Add a note toggle — no border above */}
+        <div className="pt-0">
           <button
             onClick={() => setShowNotes(v => !v)}
-            className="w-full h-10 rounded-lg border border-gray-200 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:border-gray-300 transition cursor-pointer flex items-center justify-center gap-2"
+            className="w-full h-10 rounded-[3px] border border-gray-200 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:border-gray-300 transition cursor-pointer flex items-center justify-center gap-2"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className={`h-4 w-4 transition-transform ${showNotes ? 'rotate-45' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />

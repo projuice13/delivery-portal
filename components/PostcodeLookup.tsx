@@ -74,8 +74,8 @@ export function PostcodeLookup({ onLookup, onLogout, loading }: PostcodeLookupPr
   }
 
   return (
-    <div className="min-h-screen bg-[#f5f6f8]">
-      <header className="bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between">
+    <div className="min-h-screen bg-white flex flex-col">
+      <header className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
         <Image src="/logo.png" alt="ProJuice" width={110} height={37} className="object-contain" />
         <button
           onClick={onLogout}
@@ -88,61 +88,63 @@ export function PostcodeLookup({ onLookup, onLogout, loading }: PostcodeLookupPr
         </button>
       </header>
 
-      <main className="max-w-xl mx-auto px-4 py-12 space-y-6">
-        <div>
-          <h1 className="text-2xl font-semibold text-gray-900 mb-1">Delivery Lookup</h1>
-          <p className="text-sm text-gray-500">Search by postcode to view delivery instructions</p>
-        </div>
+      <main className="flex-1 flex items-center justify-center px-4 py-12">
+        <div className="w-full max-w-md bg-gray-50 border border-gray-200 rounded-[3px] p-8 space-y-6">
+          <div>
+            <h1 className="text-2xl font-semibold text-gray-900 mb-1">Delivery Lookup</h1>
+            <p className="text-sm text-gray-500">Search by postcode to view delivery instructions</p>
+          </div>
 
-        <form onSubmit={handleSearch} className="relative space-y-3">
-          <input
-            ref={inputRef}
-            placeholder="Enter postcode(s), separated by commas"
-            value={input}
-            onChange={e => updateInput(e.target.value)}
-            onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
-            onFocus={() => suggestions.length > 0 && setShowSuggestions(true)}
-            className="w-full h-11 rounded-lg border border-gray-200 bg-white px-4 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition"
-          />
-          {showSuggestions && (
-            <div className="absolute z-10 w-full bg-white border border-gray-100 rounded-lg shadow-lg mt-1 overflow-hidden">
-              {suggestions.map(s => (
-                <button
-                  key={s}
-                  type="button"
-                  className="w-full text-left px-4 py-2.5 hover:bg-gray-50 text-sm font-mono text-gray-700 cursor-pointer"
-                  onMouseDown={() => selectSuggestion(s)}
-                >
-                  {s}
-                </button>
-              ))}
+          <form onSubmit={handleSearch} className="relative space-y-3">
+            <input
+              ref={inputRef}
+              placeholder="Enter postcode(s), separated by commas"
+              value={input}
+              onChange={e => updateInput(e.target.value)}
+              onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
+              onFocus={() => suggestions.length > 0 && setShowSuggestions(true)}
+              className="w-full h-14 rounded-[3px] border border-gray-200 bg-white px-4 text-base outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition"
+            />
+            {showSuggestions && (
+              <div className="absolute z-10 w-full bg-white border border-gray-100 rounded-[3px] shadow-lg mt-1 overflow-hidden">
+                {suggestions.map(s => (
+                  <button
+                    key={s}
+                    type="button"
+                    className="w-full text-left px-4 py-2.5 hover:bg-gray-50 text-sm font-mono text-gray-700 cursor-pointer"
+                    onMouseDown={() => selectSuggestion(s)}
+                  >
+                    {s}
+                  </button>
+                ))}
+              </div>
+            )}
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full h-12 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-[3px] transition cursor-pointer"
+            >
+              {loading ? 'Looking up…' : 'Search Instructions'}
+            </button>
+          </form>
+
+          {recentSearches.length > 0 && (
+            <div className="space-y-2">
+              <p className="text-xs font-medium text-gray-400 uppercase tracking-wider">Recent searches</p>
+              <div className="flex flex-wrap gap-2">
+                {recentSearches.map(pc => (
+                  <button
+                    key={pc}
+                    onClick={() => { setInput(pc); onLookup([pc]); }}
+                    className="text-xs bg-white border border-gray-200 rounded-[3px] px-3 py-1.5 hover:border-blue-300 hover:text-blue-600 font-mono text-gray-600 transition cursor-pointer"
+                  >
+                    {pc}
+                  </button>
+                ))}
+              </div>
             </div>
           )}
-          <button
-            type="submit"
-            disabled={loading || !input.trim()}
-            className="w-full h-11 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-sm font-medium rounded-lg transition cursor-pointer"
-          >
-            {loading ? 'Looking up…' : 'Look up instructions'}
-          </button>
-        </form>
-
-        {recentSearches.length > 0 && (
-          <div className="space-y-2">
-            <p className="text-xs font-medium text-gray-400 uppercase tracking-wider">Recent searches</p>
-            <div className="flex flex-wrap gap-2">
-              {recentSearches.map(pc => (
-                <button
-                  key={pc}
-                  onClick={() => { setInput(pc); onLookup([pc]); }}
-                  className="text-xs bg-white border border-gray-200 rounded-md px-3 py-1.5 hover:border-blue-300 hover:text-blue-600 font-mono text-gray-600 transition cursor-pointer"
-                >
-                  {pc}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
+        </div>
       </main>
     </div>
   );

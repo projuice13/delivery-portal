@@ -37,14 +37,13 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#f5f6f8] px-4">
+    <div className="min-h-screen flex items-center justify-center bg-white px-4">
       <div className="w-full max-w-sm">
-        {/* Logo */}
         <div className="flex justify-center mb-8">
           <Image src="/logo.png" alt="ProJuice" width={160} height={54} className="object-contain" />
         </div>
 
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8">
+        <div className="bg-gray-50 border border-gray-200 rounded-[3px] p-8">
           <h1 className="text-xl font-semibold text-gray-900 mb-1">Driver Portal</h1>
           <p className="text-sm text-gray-500 mb-6">Enter your password to continue</p>
 
@@ -60,7 +59,7 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
                 value={password}
                 onChange={e => setPassword(e.target.value)}
                 required
-                className="w-full h-10 rounded-md border border-gray-200 px-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition"
+                className="w-full h-10 rounded-[3px] border border-gray-200 bg-white px-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition"
                 placeholder="Enter password"
               />
             </div>
@@ -69,23 +68,23 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
               <input
                 id="rememberMe"
                 type="checkbox"
-                className="h-4 w-4 rounded border-gray-300 accent-blue-600"
+                className="h-4 w-4 rounded border-gray-300 accent-blue-600 cursor-pointer"
                 checked={rememberMe}
                 onChange={e => setRememberMe(e.target.checked)}
               />
-              <label htmlFor="rememberMe" className="text-sm text-gray-600">
+              <label htmlFor="rememberMe" className="text-sm text-gray-600 cursor-pointer">
                 Remember me for 30 days
               </label>
             </div>
 
             {error && (
-              <p className="text-sm text-red-600 bg-red-50 rounded-lg px-3 py-2">{error}</p>
+              <p className="text-sm text-red-600 bg-red-50 rounded-[3px] px-3 py-2">{error}</p>
             )}
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full h-10 bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white text-sm font-medium rounded-md transition cursor-pointer"
+              className="w-full h-10 bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white text-sm font-medium rounded-[3px] transition cursor-pointer"
             >
               {loading ? 'Signing in…' : 'Sign in'}
             </button>
@@ -95,4 +94,3 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
     </div>
   );
 }
-
