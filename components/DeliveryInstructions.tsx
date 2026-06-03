@@ -22,7 +22,7 @@ export function DeliveryInstructions({ data, onBack }: DeliveryInstructionsProps
           onClick={() => setLightboxUrl(null)}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={lightboxUrl} alt="Full size" className="max-w-full max-h-full object-contain rounded-[3px]" />
+          <img src={lightboxUrl} alt="Full size" className="max-w-full max-h-full object-contain rounded-[5px]" />
         </div>
       )}
 
@@ -36,7 +36,7 @@ export function DeliveryInstructions({ data, onBack }: DeliveryInstructionsProps
           </svg>
           Back to Search
         </button>
-        <Image src="/logo.png" alt="ProJuice" width={120} height={40} className="object-contain" />
+        <Image src="/pj.png" alt="ProJuice" width={40} height={40} className="object-contain" />
         <button
           onClick={() => window.print()}
           className="text-sm text-gray-500 hover:text-gray-800 transition cursor-pointer"
@@ -68,7 +68,7 @@ function EntryCard({
   const [showNotes, setShowNotes] = useState(false);
 
   return (
-    <div className="bg-gray-50 border border-gray-200 rounded-[3px] overflow-hidden">
+    <div className="bg-gray-50 border border-gray-200 rounded-[5px] overflow-hidden">
       <div className="px-6 pt-6 pb-4 border-b border-gray-200">
         <p className="text-2xl font-bold text-gray-900 mb-2">{formatPostcode(postcode)}</p>
         <p className="text-base font-medium text-gray-600">{entry.companyName}</p>
@@ -110,7 +110,7 @@ function EntryCard({
             <div className="space-y-3">
               {entry.instructions.map((inst, i) => (
                 <div key={i}>
-                  <span className={`inline-block text-xs font-medium px-2 py-0.5 rounded-[3px] mb-1.5 border bg-transparent ${
+                  <span className={`inline-block text-xs font-medium px-2 py-0.5 rounded-[5px] mb-1.5 border bg-transparent ${
                     inst.source === 'import'
                       ? 'text-blue-600 border-blue-600'
                       : 'text-purple-600 border-purple-600'
@@ -133,7 +133,7 @@ function EntryCard({
                   <img
                     src={url}
                     alt={`Photo ${i + 1}`}
-                    className="h-24 w-24 object-cover rounded-[3px] border border-gray-200 hover:opacity-80 transition"
+                    className="h-24 w-24 object-cover rounded-[5px] border border-gray-200 hover:opacity-80 transition"
                   />
                 </button>
               ))}
@@ -145,7 +145,7 @@ function EntryCard({
         <div className="pt-0">
           <button
             onClick={() => setShowNotes(v => !v)}
-            className="w-full h-10 rounded-[3px] border border-gray-200 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:border-gray-300 transition cursor-pointer flex items-center justify-center gap-2"
+            className="w-full h-10 rounded-[5px] border border-gray-200 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:border-gray-300 transition cursor-pointer flex items-center justify-center gap-2"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className={`h-4 w-4 transition-transform ${showNotes ? 'rotate-45' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />

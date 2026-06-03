@@ -26,7 +26,7 @@ export function MultipleDeliveryResults({ results, onBack }: MultipleDeliveryRes
           </svg>
           Back to Search
         </button>
-        <Image src="/logo.png" alt="ProJuice" width={110} height={37} className="object-contain" />
+        <Image src="/pj.png" alt="ProJuice" width={40} height={40} className="object-contain" />
         <button
           onClick={() => window.print()}
           className="text-sm text-gray-500 hover:text-gray-800 transition cursor-pointer"
@@ -42,7 +42,7 @@ export function MultipleDeliveryResults({ results, onBack }: MultipleDeliveryRes
           </h1>
 
           {results.map(result => (
-            <div key={result.postcode} className="bg-gray-50 border border-gray-200 rounded-[3px] overflow-hidden">
+            <div key={result.postcode} className="bg-gray-50 border border-gray-200 rounded-[5px] overflow-hidden">
               <div className="px-5 py-4 flex items-center justify-between border-b border-gray-200">
                 <div>
                   <p className="text-xl font-bold text-gray-900">{formatPostcode(result.postcode)}</p>
@@ -85,7 +85,7 @@ export function MultipleDeliveryResults({ results, onBack }: MultipleDeliveryRes
                 <div className="pt-2 print:hidden">
                   <button
                     onClick={() => setOpenNotes(openNotes === result.postcode ? null : result.postcode)}
-                    className="w-full h-10 rounded-[3px] border border-gray-200 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:border-gray-300 transition cursor-pointer flex items-center justify-center gap-2"
+                    className="w-full h-10 rounded-[5px] border border-gray-200 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:border-gray-300 transition cursor-pointer flex items-center justify-center gap-2"
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" className={`h-4 w-4 transition-transform ${openNotes === result.postcode ? 'rotate-45' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />

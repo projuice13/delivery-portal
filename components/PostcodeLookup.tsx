@@ -76,7 +76,7 @@ export function PostcodeLookup({ onLookup, onLogout, loading }: PostcodeLookupPr
   return (
     <div className="min-h-screen bg-white flex flex-col">
       <header className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
-        <Image src="/logo.png" alt="ProJuice" width={110} height={37} className="object-contain" />
+        <Image src="/pj.png" alt="ProJuice" width={40} height={40} className="object-contain" />
         <button
           onClick={onLogout}
           className="text-gray-400 hover:text-gray-600 transition cursor-pointer"
@@ -89,7 +89,7 @@ export function PostcodeLookup({ onLookup, onLogout, loading }: PostcodeLookupPr
       </header>
 
       <main className="flex-1 flex items-center justify-center px-4 py-12">
-        <div className="w-full max-w-md bg-gray-50 border border-gray-200 rounded-[3px] p-8 space-y-6">
+        <div className="w-full max-w-md bg-gray-50 border border-gray-200 rounded-[5px] p-8 space-y-6">
           <h1 className="text-2xl font-semibold text-gray-900">Search Postcode</h1>
 
           <form onSubmit={handleSearch} className="relative space-y-3">
@@ -100,10 +100,10 @@ export function PostcodeLookup({ onLookup, onLogout, loading }: PostcodeLookupPr
               onChange={e => updateInput(e.target.value)}
               onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
               onFocus={() => suggestions.length > 0 && setShowSuggestions(true)}
-              className="w-full h-14 rounded-[3px] border border-gray-200 bg-white px-4 text-base outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition"
+              className="w-full h-14 rounded-[5px] border border-gray-200 bg-white px-4 text-base outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition"
             />
             {showSuggestions && (
-              <div className="absolute z-10 w-full bg-white border border-gray-100 rounded-[3px] shadow-lg mt-1 overflow-hidden">
+              <div className="absolute z-10 w-full bg-white border border-gray-100 rounded-[5px] shadow-lg mt-1 overflow-hidden">
                 {suggestions.map(s => (
                   <button
                     key={s}
@@ -119,7 +119,7 @@ export function PostcodeLookup({ onLookup, onLogout, loading }: PostcodeLookupPr
             <button
               type="submit"
               disabled={loading}
-              className="w-full h-12 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-[3px] transition cursor-pointer"
+              className="w-full h-12 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-[5px] transition cursor-pointer"
             >
               {loading ? 'Looking up…' : 'Search Instructions'}
             </button>
@@ -133,7 +133,7 @@ export function PostcodeLookup({ onLookup, onLogout, loading }: PostcodeLookupPr
                   <button
                     key={pc}
                     onClick={() => { setInput(pc); onLookup([pc]); }}
-                    className="text-xs bg-white border border-gray-200 rounded-[3px] px-3 py-1.5 hover:border-blue-300 hover:text-blue-600 font-mono text-gray-600 transition cursor-pointer"
+                    className="text-xs bg-white border border-gray-200 rounded-[5px] px-3 py-1.5 hover:border-blue-300 hover:text-blue-600 font-mono text-gray-600 transition cursor-pointer"
                   >
                     {pc}
                   </button>

@@ -22,12 +22,12 @@ export function NoResultsView({ postcode, onBack }: NoResultsViewProps) {
           </svg>
           Back to Search
         </button>
-        <Image src="/logo.png" alt="ProJuice" width={110} height={37} className="object-contain" />
+        <Image src="/pj.png" alt="ProJuice" width={40} height={40} className="object-contain" />
         <div className="w-24" />
       </header>
 
       <main className="flex-1 flex items-start justify-center px-4 py-8">
-        <div className="w-full max-w-2xl bg-gray-50 border border-gray-200 rounded-[3px] p-6">
+        <div className="w-full max-w-2xl bg-gray-50 border border-gray-200 rounded-[5px] p-6">
           <p className="text-2xl font-bold text-gray-900 mb-2">{formatPostcode(postcode)}</p>
           <p className="text-base font-medium text-gray-600 mb-1">No results found</p>
           <p className="text-sm text-gray-500 mb-6">

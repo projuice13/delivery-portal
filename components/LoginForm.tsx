@@ -39,15 +39,15 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
   return (
     <div className="min-h-screen flex items-center justify-center bg-white px-4">
       <div className="w-full max-w-sm">
-        <div className="flex justify-center mb-8">
-          <Image src="/logo.png" alt="ProJuice" width={160} height={54} className="object-contain" />
-        </div>
+        <div className="bg-gray-50 border border-gray-200 rounded-[5px] p-8 text-center">
+          <div className="flex justify-center mb-5">
+            <Image src="/pj.png" alt="ProJuice" width={80} height={80} className="object-contain rounded-[5px]" />
+          </div>
 
-        <div className="bg-gray-50 border border-gray-200 rounded-[3px] p-8">
           <h1 className="text-xl font-semibold text-gray-900 mb-1">Driver Portal</h1>
           <p className="text-sm text-gray-500 mb-6">Enter your password to continue</p>
 
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4 text-left">
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1.5">
                 Password
@@ -59,7 +59,7 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
                 value={password}
                 onChange={e => setPassword(e.target.value)}
                 required
-                className="w-full h-10 rounded-[3px] border border-gray-200 bg-white px-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition"
+                className="w-full h-10 rounded-[5px] border border-gray-200 bg-white px-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition"
                 placeholder="Enter password"
               />
             </div>
@@ -78,13 +78,13 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
             </div>
 
             {error && (
-              <p className="text-sm text-red-600 bg-red-50 rounded-[3px] px-3 py-2">{error}</p>
+              <p className="text-sm text-red-600 bg-red-50 rounded-[5px] px-3 py-2">{error}</p>
             )}
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full h-10 bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white text-sm font-medium rounded-[3px] transition cursor-pointer"
+              className="w-full h-10 bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white text-sm font-medium rounded-[5px] transition cursor-pointer"
             >
               {loading ? 'Signing in…' : 'Sign in'}
             </button>

@@ -71,7 +71,7 @@ export function DriverNotesForm({ postcode, onClose }: DriverNotesFormProps) {
 
   if (success) {
     return (
-      <div className="rounded-[3px] bg-green-50 border border-green-100 p-4 text-center space-y-2">
+      <div className="rounded-[5px] bg-green-50 border border-green-100 p-4 text-center space-y-2">
         <p className="font-medium text-green-800">Note submitted successfully!</p>
         {onClose && (
           <button onClick={onClose} className="text-sm text-green-700 underline cursor-pointer">
@@ -92,7 +92,7 @@ export function DriverNotesForm({ postcode, onClose }: DriverNotesFormProps) {
           value={driverName}
           onChange={e => setDriverName(e.target.value)}
           required
-          className="w-full h-10 rounded-[3px] border border-gray-200 bg-white px-3 pr-8 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 fill=%22none%22 viewBox=%220 0 20 20%22%3E%3Cpath stroke=%22%236B7280%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22 stroke-width=%221.5%22 d=%22M6 8l4 4 4-4%22/%3E%3C/svg%3E')] bg-[length:20px_20px] bg-[right_8px_center] bg-no-repeat appearance-none cursor-pointer"
+          className="w-full h-10 rounded-[5px] border border-gray-200 bg-white px-3 pr-8 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 fill=%22none%22 viewBox=%220 0 20 20%22%3E%3Cpath stroke=%22%236B7280%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22 stroke-width=%221.5%22 d=%22M6 8l4 4 4-4%22/%3E%3C/svg%3E')] bg-[length:20px_20px] bg-[right_8px_center] bg-no-repeat appearance-none cursor-pointer"
         >
           <option value="">Please select</option>
           {DRIVERS.map(d => (
@@ -110,7 +110,7 @@ export function DriverNotesForm({ postcode, onClose }: DriverNotesFormProps) {
           placeholder="Enter What3Words if applicable"
           value={what3words}
           onChange={e => setWhat3words(e.target.value)}
-          className="w-full h-10 rounded-[3px] border border-gray-200 bg-white px-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition"
+          className="w-full h-10 rounded-[5px] border border-gray-200 bg-white px-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition"
         />
       </div>
 
@@ -124,7 +124,7 @@ export function DriverNotesForm({ postcode, onClose }: DriverNotesFormProps) {
           value={notes}
           onChange={e => setNotes(e.target.value)}
           required
-          className="w-full rounded-[3px] border border-gray-200 bg-white px-3 py-2.5 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition resize-none"
+          className="w-full rounded-[5px] border border-gray-200 bg-white px-3 py-2.5 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition resize-none"
         />
       </div>
 
@@ -135,17 +135,17 @@ export function DriverNotesForm({ postcode, onClose }: DriverNotesFormProps) {
         <input
           type="file"
           onChange={handleFile}
-          className="w-full text-sm text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-[3px] file:border-0 file:text-sm file:font-medium file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200 transition border border-gray-200 rounded-[3px] cursor-pointer"
+          className="w-full text-sm text-gray-500 file:mr-3 file:py-1.5 file:px-3 file:rounded-[5px] file:border-0 file:text-sm file:font-medium file:bg-gray-100 file:text-gray-700 hover:file:bg-gray-200 transition border border-gray-200 rounded-[5px] cursor-pointer"
         />
         {fileError && <p className="mt-1 text-xs text-red-600">{fileError}</p>}
       </div>
 
-      {error && <p className="text-sm text-red-600 bg-red-50 rounded-[3px] px-3 py-2">{error}</p>}
+      {error && <p className="text-sm text-red-600 bg-red-50 rounded-[5px] px-3 py-2">{error}</p>}
 
       <button
         type="submit"
         disabled={submitting || !driverName || !notes}
-        className="w-full h-10 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-[3px] transition flex items-center justify-center gap-2 cursor-pointer"
+        className="w-full h-10 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-[5px] transition flex items-center justify-center gap-2 cursor-pointer"
       >
         {submitting ? (
           'Submitting…'
