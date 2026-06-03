@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { LoginForm } from '@/components/LoginForm';
 import { PostcodeLookup } from '@/components/PostcodeLookup';
 import { DeliveryInstructions } from '@/components/DeliveryInstructions';
@@ -24,7 +24,9 @@ export default function Home() {
   const [multipleResults, setMultipleResults] = useState<DeliveryResult[]>([]);
   const [noResultPostcode, setNoResultPostcode] = useState('');
 
-  const { data: user, isLoading: authLoading, refetch: refetchUser } = useQuery({
+  const queryClient = useQueryClient();
+
+  const { data: user, isLoading: authLoading } = useQuery({
     queryKey: ['auth-user'],
     queryFn: async () => {
       const res = await fetch('/api/auth/user', { credentials: 'include' });
@@ -41,10 +43,10 @@ export default function Home() {
   }, [authLoading, user, view]);
 
   function handleLogout() {
-    // Switch view immediately so the button always feels responsive
+    // Clear cached user immediately so the auth effect can't bounce back to driver-lookup
+    queryClient.setQueryData(['auth-user'], null);
     setView('login');
     fetch('/api/auth/logout', { method: 'POST', credentials: 'include' }).catch(() => {});
-    refetchUser();
   }
 
   async function handleLookup(postcodes: string[]) {
@@ -94,7 +96,6 @@ export default function Home() {
       {view === 'login' && (
         <LoginForm
           onSuccess={() => {
-            refetchUser();
             setView('driver-lookup');
           }}
         />
