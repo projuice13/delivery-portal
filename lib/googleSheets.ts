@@ -36,7 +36,7 @@ export async function lookupPostcode(postcode: string): Promise<DeliveryData | n
     const rowPostcode = normalisePostcode((row[18] as string) ?? '');
     if (rowPostcode !== normalised) continue;
 
-    const companyName = (row[3] as string) ?? '';
+    const companyName = (row[8] as string) ?? '';
     const phone = (row[19] as string) ?? '';
     const instructions = (row[43] as string) ?? '';
     const key = companyName.toLowerCase();
