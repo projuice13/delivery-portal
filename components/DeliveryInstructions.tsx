@@ -145,7 +145,11 @@ function EntryCard({
         <div className="pt-0">
           <button
             onClick={() => setShowNotes(v => !v)}
-            className="w-full h-10 rounded-[5px] border border-gray-200 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:border-gray-300 transition cursor-pointer flex items-center justify-center gap-2"
+            className={`w-full h-10 rounded-[5px] border text-sm font-medium transition cursor-pointer flex items-center justify-center gap-2 ${
+              showNotes
+                ? 'border-gray-200 text-gray-600 bg-transparent hover:bg-gray-100'
+                : 'border-blue-600 bg-blue-600 text-white hover:bg-blue-700'
+            }`}
           >
             <svg xmlns="http://www.w3.org/2000/svg" className={`h-4 w-4 transition-transform ${showNotes ? 'rotate-45' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
