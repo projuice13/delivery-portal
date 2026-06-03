@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { useQuery } from '@tanstack/react-query';
+import Image from 'next/image';
 
 interface PostcodeLookupProps {
   onLookup: (postcodes: string[]) => void;
@@ -75,7 +76,7 @@ export function PostcodeLookup({ onLookup, onLogout, loading }: PostcodeLookupPr
   return (
     <div className="min-h-screen bg-[#f5f6f8]">
       <header className="bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between">
-        <ProJuiceLogo />
+        <Image src="/logo.png" alt="ProJuice" width={110} height={37} className="object-contain" />
         <button
           onClick={onLogout}
           className="text-gray-400 hover:text-gray-600 transition"
@@ -147,11 +148,3 @@ export function PostcodeLookup({ onLookup, onLogout, loading }: PostcodeLookupPr
   );
 }
 
-function ProJuiceLogo() {
-  return (
-    <div className="inline-flex items-center gap-0.5">
-      <span className="text-xl font-bold text-gray-900">Pro</span>
-      <span className="text-xl font-bold text-orange-500">Juice</span>
-    </div>
-  );
-}

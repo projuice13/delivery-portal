@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 
 interface LoginFormProps {
   onSuccess: () => void;
@@ -39,8 +40,8 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
     <div className="min-h-screen flex items-center justify-center bg-[#f5f6f8] px-4">
       <div className="w-full max-w-sm">
         {/* Logo */}
-        <div className="text-center mb-8">
-          <ProJuiceLogo />
+        <div className="flex justify-center mb-8">
+          <Image src="/logo.png" alt="ProJuice" width={160} height={54} className="object-contain" />
         </div>
 
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
@@ -95,11 +96,3 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
   );
 }
 
-function ProJuiceLogo() {
-  return (
-    <div className="inline-flex items-center gap-1.5">
-      <span className="text-2xl font-bold text-gray-900">Pro</span>
-      <span className="text-2xl font-bold text-orange-500">Juice</span>
-    </div>
-  );
-}

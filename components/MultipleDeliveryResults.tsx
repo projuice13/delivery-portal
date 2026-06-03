@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import Image from 'next/image';
 import { DriverNotesForm } from './DriverNotesForm';
 import { formatPostcode } from '@/lib/formatPostcode';
 import type { DeliveryResult } from '@/lib/types';
@@ -25,7 +26,7 @@ export function MultipleDeliveryResults({ results, onBack }: MultipleDeliveryRes
           </svg>
           Back to Search
         </button>
-        <ProJuiceLogo />
+        <Image src="/logo.png" alt="ProJuice" width={110} height={37} className="object-contain" />
         <div className="w-16" />
       </header>
 
@@ -90,11 +91,3 @@ export function MultipleDeliveryResults({ results, onBack }: MultipleDeliveryRes
   );
 }
 
-function ProJuiceLogo() {
-  return (
-    <div className="inline-flex items-center gap-0.5">
-      <span className="text-xl font-bold text-gray-900">Pro</span>
-      <span className="text-xl font-bold text-orange-500">Juice</span>
-    </div>
-  );
-}

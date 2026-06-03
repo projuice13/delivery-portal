@@ -92,7 +92,7 @@ export function DriverNotesForm({ postcode, onClose }: DriverNotesFormProps) {
           value={driverName}
           onChange={e => setDriverName(e.target.value)}
           required
-          className="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition appearance-none"
+          className="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 pr-8 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 fill=%22none%22 viewBox=%220 0 20 20%22%3E%3Cpath stroke=%22%236B7280%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22 stroke-width=%221.5%22 d=%22M6 8l4 4 4-4%22/%3E%3C/svg%3E')] bg-[length:20px_20px] bg-[right_8px_center] bg-no-repeat appearance-none"
         >
           <option value="">Please select</option>
           {DRIVERS.map(d => (
