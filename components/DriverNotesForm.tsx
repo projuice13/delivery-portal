@@ -92,7 +92,7 @@ export function DriverNotesForm({ postcode, onClose }: DriverNotesFormProps) {
           value={driverName}
           onChange={e => setDriverName(e.target.value)}
           required
-          className="w-full h-10 rounded-lg border border-gray-200 bg-white px-3 pr-8 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 fill=%22none%22 viewBox=%220 0 20 20%22%3E%3Cpath stroke=%22%236B7280%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22 stroke-width=%221.5%22 d=%22M6 8l4 4 4-4%22/%3E%3C/svg%3E')] bg-[length:20px_20px] bg-[right_8px_center] bg-no-repeat appearance-none"
+          className="w-full h-10 rounded-md border border-gray-200 bg-white px-3 pr-8 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 fill=%22none%22 viewBox=%220 0 20 20%22%3E%3Cpath stroke=%22%236B7280%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22 stroke-width=%221.5%22 d=%22M6 8l4 4 4-4%22/%3E%3C/svg%3E')] bg-[length:20px_20px] bg-[right_8px_center] bg-no-repeat appearance-none cursor-pointer"
         >
           <option value="">Please select</option>
           {DRIVERS.map(d => (
@@ -110,7 +110,7 @@ export function DriverNotesForm({ postcode, onClose }: DriverNotesFormProps) {
           placeholder="Enter What3Words if applicable"
           value={what3words}
           onChange={e => setWhat3words(e.target.value)}
-          className="w-full h-10 rounded-lg border border-gray-200 px-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition"
+          className="w-full h-10 rounded-md border border-gray-200 px-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition"
         />
       </div>
 
@@ -124,7 +124,7 @@ export function DriverNotesForm({ postcode, onClose }: DriverNotesFormProps) {
           value={notes}
           onChange={e => setNotes(e.target.value)}
           required
-          className="w-full rounded-lg border border-gray-200 px-3 py-2.5 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition resize-none"
+          className="w-full rounded-md border border-gray-200 px-3 py-2.5 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition resize-none"
         />
       </div>
 
@@ -145,7 +145,7 @@ export function DriverNotesForm({ postcode, onClose }: DriverNotesFormProps) {
       <button
         type="submit"
         disabled={submitting || !driverName || !notes}
-        className="w-full h-10 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-sm font-medium rounded-lg transition flex items-center justify-center gap-2"
+        className="w-full h-10 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-sm font-medium rounded-md transition flex items-center justify-center gap-2 cursor-pointer"
       >
         {submitting ? (
           'Submitting…'

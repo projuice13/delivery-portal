@@ -18,7 +18,7 @@ export function DeliveryInstructions({ data, onBack }: DeliveryInstructionsProps
     <div className="min-h-screen bg-[#f5f6f8]">
       {lightboxUrl && (
         <div
-          className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4 cursor-pointer"
           onClick={() => setLightboxUrl(null)}
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -29,7 +29,7 @@ export function DeliveryInstructions({ data, onBack }: DeliveryInstructionsProps
       <header className="bg-white border-b border-gray-100 px-6 py-3 flex items-center justify-between print:hidden">
         <button
           onClick={onBack}
-          className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-800 transition"
+          className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-800 transition cursor-pointer"
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -39,7 +39,7 @@ export function DeliveryInstructions({ data, onBack }: DeliveryInstructionsProps
         <Image src="/logo.png" alt="ProJuice" width={120} height={40} className="object-contain" />
         <button
           onClick={() => window.print()}
-          className="text-sm text-gray-500 hover:text-gray-800 transition"
+          className="text-sm text-gray-500 hover:text-gray-800 transition cursor-pointer"
         >
           Print
         </button>
@@ -66,10 +66,10 @@ function EntryCard({
   const [showNotes, setShowNotes] = useState(false);
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+    <div className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
       <div className="px-6 pt-6 pb-4 border-b border-gray-50">
-        <p className="text-sm font-medium text-gray-400 mb-0.5">{formatPostcode(postcode)}</p>
-        <h2 className="text-lg font-semibold text-gray-900">{entry.companyName}</h2>
+        <p className="text-2xl font-bold text-gray-900 mb-2">{formatPostcode(postcode)}</p>
+        <p className="text-base font-medium text-gray-600">{entry.companyName}</p>
       </div>
 
       <div className="px-6 py-5 space-y-5">
@@ -77,7 +77,7 @@ function EntryCard({
           <Section label="Phone">
             <div className="flex flex-wrap gap-3">
               {entry.phone.map((p, i) => (
-                <a key={i} href={`tel:${p.canonical}`} className="text-sm text-blue-600 hover:underline">
+                <a key={i} href={`tel:${p.canonical}`} className="text-sm text-blue-600 hover:underline cursor-pointer">
                   {p.display}
                 </a>
               ))}
@@ -94,7 +94,7 @@ function EntryCard({
                   href={`https://what3words.com/${w}`}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-sm text-blue-600 hover:underline font-mono"
+                  className="text-sm text-blue-600 hover:underline font-mono cursor-pointer"
                 >
                   ///{w}
                 </a>
@@ -108,7 +108,7 @@ function EntryCard({
             <div className="space-y-3">
               {entry.instructions.map((inst, i) => (
                 <div key={i}>
-                  <span className={`inline-block text-xs font-medium px-2 py-0.5 rounded-md mb-1.5 ${
+                  <span className={`inline-block text-xs font-medium px-2 py-0.5 rounded mb-1.5 ${
                     inst.source === 'import'
                       ? 'bg-blue-50 text-blue-700'
                       : 'bg-purple-50 text-purple-700'
@@ -126,12 +126,12 @@ function EntryCard({
           <Section label="Photos">
             <div className="flex gap-2 flex-wrap">
               {[entry.image1Url, entry.image2Url].filter(Boolean).map((url, i) => (
-                <button key={i} onClick={() => onImageClick(url!)} className="focus:outline-none">
+                <button key={i} onClick={() => onImageClick(url!)} className="focus:outline-none cursor-pointer">
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={url}
                     alt={`Photo ${i + 1}`}
-                    className="h-24 w-24 object-cover rounded-xl border border-gray-100 hover:opacity-80 transition"
+                    className="h-24 w-24 object-cover rounded-lg border border-gray-100 hover:opacity-80 transition"
                   />
                 </button>
               ))}
@@ -139,11 +139,11 @@ function EntryCard({
           </Section>
         )}
 
-        {/* Toggle driver note */}
+        {/* Toggle driver note — full width button */}
         <div className="pt-2 border-t border-gray-100">
           <button
             onClick={() => setShowNotes(v => !v)}
-            className="flex items-center gap-1.5 text-sm font-medium text-blue-600 hover:text-blue-700 transition"
+            className="w-full h-10 rounded-lg border border-gray-200 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:border-gray-300 transition cursor-pointer flex items-center justify-center gap-2"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className={`h-4 w-4 transition-transform ${showNotes ? 'rotate-45' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />

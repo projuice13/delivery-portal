@@ -19,7 +19,7 @@ export function MultipleDeliveryResults({ results, onBack }: MultipleDeliveryRes
       <header className="bg-white border-b border-gray-100 px-6 py-4 flex items-center justify-between">
         <button
           onClick={onBack}
-          className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-800 transition"
+          className="flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-800 transition cursor-pointer"
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -27,19 +27,26 @@ export function MultipleDeliveryResults({ results, onBack }: MultipleDeliveryRes
           Back to Search
         </button>
         <Image src="/logo.png" alt="ProJuice" width={110} height={37} className="object-contain" />
-        <div className="w-16" />
+        <button
+          onClick={() => window.print()}
+          className="text-sm text-gray-500 hover:text-gray-800 transition cursor-pointer"
+        >
+          Print all
+        </button>
       </header>
 
       <main className="max-w-2xl mx-auto px-4 py-6 space-y-4">
-        <h1 className="text-xl font-semibold text-gray-900">
-          {results.length} postcode{results.length !== 1 ? 's' : ''}
-        </h1>
+        <div className="flex items-center justify-between">
+          <h1 className="text-xl font-semibold text-gray-900">
+            {results.length} postcode{results.length !== 1 ? 's' : ''}
+          </h1>
+        </div>
 
         {results.map(result => (
-          <div key={result.postcode} className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+          <div key={result.postcode} className="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
             <div className="px-5 py-4 flex items-center justify-between border-b border-gray-50">
               <div>
-                <p className="font-semibold text-gray-900">{formatPostcode(result.postcode)}</p>
+                <p className="text-xl font-bold text-gray-900">{formatPostcode(result.postcode)}</p>
                 {result.data && (
                   <p className="text-xs text-gray-400 mt-0.5">
                     {result.data.entries.length} {result.data.entries.length === 1 ? 'entry' : 'entries'}
@@ -58,8 +65,15 @@ export function MultipleDeliveryResults({ results, onBack }: MultipleDeliveryRes
                 result.data.entries.map((entry, i) => (
                   <div key={i}>
                     <p className="text-sm font-medium text-gray-800">{entry.companyName}</p>
+                    {entry.phone.length > 0 && (
+                      <div className="flex gap-2 mt-0.5">
+                        {entry.phone.map((p, j) => (
+                          <a key={j} href={`tel:${p.canonical}`} className="text-xs text-blue-600 hover:underline cursor-pointer">{p.display}</a>
+                        ))}
+                      </div>
+                    )}
                     {entry.instructions.map((inst, j) => (
-                      <p key={j} className="text-xs text-gray-500 mt-0.5 pl-3 border-l-2 border-gray-100">
+                      <p key={j} className="text-xs text-gray-500 mt-1 pl-3 border-l-2 border-gray-100">
                         {inst.text}
                       </p>
                     ))}
@@ -69,12 +83,15 @@ export function MultipleDeliveryResults({ results, onBack }: MultipleDeliveryRes
                 <p className="text-sm text-gray-400">No delivery instructions found.</p>
               )}
 
-              <div className="pt-2">
+              <div className="pt-2 border-t border-gray-100 print:hidden">
                 <button
                   onClick={() => setOpenNotes(openNotes === result.postcode ? null : result.postcode)}
-                  className="text-sm text-blue-600 hover:text-blue-700 font-medium transition"
+                  className="w-full h-10 rounded-lg border border-gray-200 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:border-gray-300 transition cursor-pointer flex items-center justify-center gap-2"
                 >
-                  {openNotes === result.postcode ? 'Hide note form' : '+ Add driver note'}
+                  <svg xmlns="http://www.w3.org/2000/svg" className={`h-4 w-4 transition-transform ${openNotes === result.postcode ? 'rotate-45' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                  </svg>
+                  {openNotes === result.postcode ? 'Hide note' : 'Add a note'}
                 </button>
 
                 {openNotes === result.postcode && (
@@ -90,4 +107,3 @@ export function MultipleDeliveryResults({ results, onBack }: MultipleDeliveryRes
     </div>
   );
 }
-

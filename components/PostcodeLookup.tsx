@@ -36,7 +36,7 @@ export function PostcodeLookup({ onLookup, onLogout, loading }: PostcodeLookupPr
 
   function updateInput(value: string) {
     setInput(value);
-    const tokens = value.split(/[\n,]+/);
+    const tokens = value.split(',');
     const last = tokens[tokens.length - 1].trim().toUpperCase();
     if (last.length >= 2 && allPostcodes?.postcodes) {
       const matches = allPostcodes.postcodes.filter(pc => pc.startsWith(last)).slice(0, 8);
@@ -48,9 +48,9 @@ export function PostcodeLookup({ onLookup, onLogout, loading }: PostcodeLookupPr
   }
 
   function selectSuggestion(pc: string) {
-    const tokens = input.split(/[\n,]+/);
-    tokens[tokens.length - 1] = pc;
-    setInput(tokens.join(', '));
+    const tokens = input.split(',');
+    tokens[tokens.length - 1] = ' ' + pc;
+    setInput(tokens.join(','));
     setShowSuggestions(false);
     inputRef.current?.focus();
   }
@@ -58,7 +58,7 @@ export function PostcodeLookup({ onLookup, onLogout, loading }: PostcodeLookupPr
   function handleSearch(e: React.FormEvent) {
     e.preventDefault();
     const postcodes = input
-      .split(/[\n,]+/)
+      .split(',')
       .map(p => p.trim().toUpperCase().replace(/\s+/g, ''))
       .filter(Boolean);
     if (!postcodes.length) return;
@@ -79,7 +79,7 @@ export function PostcodeLookup({ onLookup, onLogout, loading }: PostcodeLookupPr
         <Image src="/logo.png" alt="ProJuice" width={110} height={37} className="object-contain" />
         <button
           onClick={onLogout}
-          className="text-gray-400 hover:text-gray-600 transition"
+          className="text-gray-400 hover:text-gray-600 transition cursor-pointer"
           title="Log out"
         >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -97,20 +97,20 @@ export function PostcodeLookup({ onLookup, onLogout, loading }: PostcodeLookupPr
         <form onSubmit={handleSearch} className="relative space-y-3">
           <input
             ref={inputRef}
-            placeholder="Enter postcode(s) — comma or newline separated"
+            placeholder="Enter postcode(s), separated by commas"
             value={input}
             onChange={e => updateInput(e.target.value)}
             onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
             onFocus={() => suggestions.length > 0 && setShowSuggestions(true)}
-            className="w-full h-11 rounded-xl border border-gray-200 bg-white px-4 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition"
+            className="w-full h-11 rounded-lg border border-gray-200 bg-white px-4 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition"
           />
           {showSuggestions && (
-            <div className="absolute z-10 w-full bg-white border border-gray-100 rounded-xl shadow-lg mt-1 overflow-hidden">
+            <div className="absolute z-10 w-full bg-white border border-gray-100 rounded-lg shadow-lg mt-1 overflow-hidden">
               {suggestions.map(s => (
                 <button
                   key={s}
                   type="button"
-                  className="w-full text-left px-4 py-2.5 hover:bg-gray-50 text-sm font-mono text-gray-700"
+                  className="w-full text-left px-4 py-2.5 hover:bg-gray-50 text-sm font-mono text-gray-700 cursor-pointer"
                   onMouseDown={() => selectSuggestion(s)}
                 >
                   {s}
@@ -121,7 +121,7 @@ export function PostcodeLookup({ onLookup, onLogout, loading }: PostcodeLookupPr
           <button
             type="submit"
             disabled={loading || !input.trim()}
-            className="w-full h-11 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-sm font-medium rounded-xl transition"
+            className="w-full h-11 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white text-sm font-medium rounded-lg transition cursor-pointer"
           >
             {loading ? 'Looking up…' : 'Look up instructions'}
           </button>
@@ -135,7 +135,7 @@ export function PostcodeLookup({ onLookup, onLogout, loading }: PostcodeLookupPr
                 <button
                   key={pc}
                   onClick={() => { setInput(pc); onLookup([pc]); }}
-                  className="text-xs bg-white border border-gray-200 rounded-lg px-3 py-1.5 hover:border-blue-300 hover:text-blue-600 font-mono text-gray-600 transition"
+                  className="text-xs bg-white border border-gray-200 rounded-md px-3 py-1.5 hover:border-blue-300 hover:text-blue-600 font-mono text-gray-600 transition cursor-pointer"
                 >
                   {pc}
                 </button>
@@ -147,4 +147,3 @@ export function PostcodeLookup({ onLookup, onLogout, loading }: PostcodeLookupPr
     </div>
   );
 }
-

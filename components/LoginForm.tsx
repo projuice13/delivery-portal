@@ -44,7 +44,7 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
           <Image src="/logo.png" alt="ProJuice" width={160} height={54} className="object-contain" />
         </div>
 
-        <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-8">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-8">
           <h1 className="text-xl font-semibold text-gray-900 mb-1">Driver Portal</h1>
           <p className="text-sm text-gray-500 mb-6">Enter your password to continue</p>
 
@@ -60,7 +60,7 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
                 value={password}
                 onChange={e => setPassword(e.target.value)}
                 required
-                className="w-full h-10 rounded-lg border border-gray-200 px-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition"
+                className="w-full h-10 rounded-md border border-gray-200 px-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition"
                 placeholder="Enter password"
               />
             </div>
@@ -85,7 +85,7 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
             <button
               type="submit"
               disabled={loading}
-              className="w-full h-10 bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white text-sm font-medium rounded-lg transition"
+              className="w-full h-10 bg-blue-600 hover:bg-blue-700 disabled:opacity-60 text-white text-sm font-medium rounded-md transition cursor-pointer"
             >
               {loading ? 'Signing in…' : 'Sign in'}
             </button>
