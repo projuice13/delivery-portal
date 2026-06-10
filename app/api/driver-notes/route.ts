@@ -37,6 +37,7 @@ export async function POST(request: NextRequest) {
     if (err instanceof Error && err.message === 'timeout') {
       return NextResponse.json({ error: 'Request timed out' }, { status: 504 });
     }
+    console.error('driver-notes error:', err);
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
