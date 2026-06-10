@@ -2,6 +2,7 @@ import { google } from 'googleapis';
 import type { DeliveryData, DeliveryEntry, InstructionWithSource } from './types';
 import { normalisePhone, canonicalPhone } from './phone';
 import { convertDriveUrl } from './driveUrl';
+import { getLibraryEntriesForPostcode, getAllLibraryPostcodes } from './libraryEntries';
 
 export async function getUncachableGoogleSheetClient() {
   const credentials = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_KEY!);
@@ -21,13 +22,12 @@ export async function lookupPostcode(postcode: string): Promise<DeliveryData | n
   const sheets = await getUncachableGoogleSheetClient();
   const sheetId = process.env.GOOGLE_SHEET_ID!;
 
-  const [importRes, libraryRes] = await Promise.all([
+  const [importRes, libraryRows] = await Promise.all([
     sheets.spreadsheets.values.get({ spreadsheetId: sheetId, range: 'Import!A:AR' }),
-    sheets.spreadsheets.values.get({ spreadsheetId: sheetId, range: 'Library!A:H' }),
+    getLibraryEntriesForPostcode(normalised),
   ]);
 
   const importRows = importRes.data.values ?? [];
-  const libraryRows = libraryRes.data.values ?? [];
 
   const mergedMap = new Map<string, DeliveryEntry>();
 
@@ -70,17 +70,13 @@ export async function lookupPostcode(postcode: string): Promise<DeliveryData | n
     mergedMap.set(key, existing);
   }
 
-  // Library tab — header in row 1 (index 0), data from index 1
-  for (let i = 1; i < libraryRows.length; i++) {
-    const row = libraryRows[i];
-    const rowPostcode = normalisePostcode((row[0] as string) ?? '');
-    if (rowPostcode !== normalised) continue;
-
-    const companyName = (row[2] as string) ?? '';
-    const w3w = (row[4] as string) ?? '';
-    const notes = (row[5] as string) ?? '';
-    const image1 = (row[6] as string) ?? '';
-    const image2 = (row[7] as string) ?? '';
+  // Library entries — from database
+  for (const row of libraryRows) {
+    const companyName = row.companyName;
+    const w3w = row.what3words;
+    const notes = row.notes;
+    const image1 = row.image1Url;
+    const image2 = row.image2Url;
     const key = companyName.toLowerCase();
 
     const existing = mergedMap.get(key) ?? {
@@ -133,9 +129,9 @@ export async function getAllPostcodes(): Promise<string[]> {
   const sheets = await getUncachableGoogleSheetClient();
   const sheetId = process.env.GOOGLE_SHEET_ID!;
 
-  const [importRes, libraryRes] = await Promise.all([
+  const [importRes, libraryPostcodes] = await Promise.all([
     sheets.spreadsheets.values.get({ spreadsheetId: sheetId, range: 'Import!S:S' }),
-    sheets.spreadsheets.values.get({ spreadsheetId: sheetId, range: 'Library!A:A' }),
+    getAllLibraryPostcodes(),
   ]);
 
   const set = new Set<string>();
@@ -145,10 +141,7 @@ export async function getAllPostcodes(): Promise<string[]> {
     if (pc) set.add(pc);
   }
 
-  // Library: skip header (row 0)
-  const libRows = libraryRes.data.values ?? [];
-  for (let i = 1; i < libRows.length; i++) {
-    const pc = ((libRows[i][0] as string) ?? '').toUpperCase().replace(/\s+/g, '');
+  for (const pc of libraryPostcodes) {
     if (pc) set.add(pc);
   }
 

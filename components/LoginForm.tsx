@@ -4,10 +4,11 @@ import { useState } from 'react';
 import Image from 'next/image';
 
 interface LoginFormProps {
-  onSuccess: () => void;
+  onSuccess: (role: 'driver' | 'office') => void;
 }
 
 export function LoginForm({ onSuccess }: LoginFormProps) {
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState('');
@@ -22,13 +23,14 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ password, rememberMe }),
+        body: JSON.stringify({ username, password, rememberMe }),
       });
       if (!res.ok) {
-        setError('Incorrect password. Please try again.');
+        setError('Incorrect username or password. Please try again.');
         return;
       }
-      onSuccess();
+      const data = await res.json();
+      onSuccess(data.role);
     } catch {
       setError('Network error. Please try again.');
     } finally {
@@ -45,9 +47,25 @@ export function LoginForm({ onSuccess }: LoginFormProps) {
           </div>
 
           <h1 className="text-xl font-semibold text-gray-900 mb-1">Driver Portal</h1>
-          <p className="text-sm text-gray-500 mb-6">Enter your password to continue</p>
+          <p className="text-sm text-gray-500 mb-6">Sign in to continue</p>
 
           <form onSubmit={handleSubmit} className="space-y-4 text-left">
+            <div>
+              <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1.5">
+                Username
+              </label>
+              <input
+                id="username"
+                type="text"
+                autoComplete="username"
+                value={username}
+                onChange={e => setUsername(e.target.value)}
+                required
+                className="w-full h-10 rounded-[5px] border border-gray-200 bg-white px-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition"
+                placeholder="Enter username"
+              />
+            </div>
+
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1.5">
                 Password

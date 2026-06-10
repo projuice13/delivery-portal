@@ -3,6 +3,7 @@ import { cookies } from 'next/headers';
 
 export interface SessionData {
   userId?: string;
+  role?: 'driver' | 'office';
 }
 
 const sevenDays = 60 * 60 * 24 * 7;

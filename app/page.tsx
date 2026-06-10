@@ -7,6 +7,7 @@ import { PostcodeLookup } from '@/components/PostcodeLookup';
 import { DeliveryInstructions } from '@/components/DeliveryInstructions';
 import { MultipleDeliveryResults } from '@/components/MultipleDeliveryResults';
 import { NoResultsView } from '@/components/NoResultsView';
+import { AdminApprovalList } from '@/components/AdminApprovalList';
 import { VersionBanner } from '@/components/VersionBanner';
 import type { DeliveryData, DeliveryResult } from '@/lib/types';
 
@@ -15,7 +16,8 @@ type View =
   | 'driver-lookup'
   | 'driver-instructions'
   | 'multiple-results'
-  | 'no-results';
+  | 'no-results'
+  | 'admin-approval';
 
 export default function Home() {
   const [view, setView] = useState<View>('login');
@@ -38,7 +40,7 @@ export default function Home() {
 
   useEffect(() => {
     if (!authLoading && user && view === 'login') {
-      setView('driver-lookup');
+      setView(user.role === 'office' ? 'admin-approval' : 'driver-lookup');
     }
   }, [authLoading, user, view]);
 
@@ -95,10 +97,14 @@ export default function Home() {
     <>
       {view === 'login' && (
         <LoginForm
-          onSuccess={() => {
-            setView('driver-lookup');
+          onSuccess={(role) => {
+            setView(role === 'office' ? 'admin-approval' : 'driver-lookup');
           }}
         />
+      )}
+
+      {view === 'admin-approval' && (
+        <AdminApprovalList onLogout={handleLogout} />
       )}
 
       {view === 'driver-lookup' && (

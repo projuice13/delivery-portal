@@ -2,6 +2,7 @@ export const runtime = 'nodejs';
 
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
+import { put } from '@vercel/blob';
 import { getSession } from '@/lib/session';
 import { db } from '@/lib/db';
 import { driverNotes, auditLogs } from '@/lib/schema';
@@ -52,6 +53,7 @@ async function handleRequest(request: NextRequest, userId: string): Promise<Next
 
   const data = parsed.data;
   let rawFileContent = data.fileContent;
+  let fileUrl = '';
 
   // Optimise image if applicable
   if (data.fileName && data.fileContent && isImageFile(data.fileName)) {
@@ -62,8 +64,24 @@ async function handleRequest(request: NextRequest, userId: string): Promise<Next
     rawFileContent = data.fileContent.slice(prefix.length);
   }
 
-  // Insert to DB — never store file content
   const noteId = crypto.randomUUID();
+
+  // Persist optimised image to Vercel Blob so it can be attached to a
+  // Library entry if the office team approves this note.
+  if (data.fileName && rawFileContent && isImageFile(data.fileName)) {
+    try {
+      const blob = await put(`driver-notes/${noteId}-${data.fileName}`, Buffer.from(rawFileContent, 'base64'), {
+        access: 'public',
+        contentType: 'image/jpeg',
+        addRandomSuffix: true,
+      });
+      fileUrl = blob.url;
+    } catch (err) {
+      console.error('blob upload error:', err);
+    }
+  }
+
+  // Insert to DB — never store raw file content
   await db.insert(driverNotes).values({
     id: noteId,
     driverId: userId,
@@ -73,6 +91,8 @@ async function handleRequest(request: NextRequest, userId: string): Promise<Next
     notes: data.notes,
     fileName: data.fileName,
     fileContent: '', // never stored
+    fileUrl,
+    status: 'pending',
   });
 
   const ip = request.headers.get('x-forwarded-for') ?? '';
