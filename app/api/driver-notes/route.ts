@@ -95,7 +95,9 @@ async function handleRequest(request: NextRequest, userId: string): Promise<Next
     notes: data.notes,
     fileName: data.fileName,
     fileContent: rawFileContent,
-  }).catch(() => {});
+  }).catch((err) => {
+    console.error('sendNoteEmail error:', err);
+  });
 
   return NextResponse.json({ id: noteId, ok: true });
 }

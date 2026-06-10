@@ -37,7 +37,7 @@ export async function sendNoteEmail(params: NoteEmailParams) {
       ? [{ filename: fileName, content: fileContent }]
       : [];
 
-  await getResend().emails.send({
+  const result = await getResend().emails.send({
     from: 'ProJuice Delivery Portal <notifications@pro-juice.co.uk>',
     to: ['drivers@projuice.co.uk'],
     subject: 'Delivery Notes Update From Driver',
@@ -45,4 +45,8 @@ export async function sendNoteEmail(params: NoteEmailParams) {
     text,
     attachments,
   });
+
+  if (result.error) {
+    throw new Error(`Resend error: ${JSON.stringify(result.error)}`);
+  }
 }
