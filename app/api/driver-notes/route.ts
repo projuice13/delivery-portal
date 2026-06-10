@@ -77,7 +77,7 @@ async function handleRequest(request: NextRequest, userId: string): Promise<Next
 
   const ip = request.headers.get('x-forwarded-for') ?? '';
 
-  // Fire-and-forget: audit + email
+  // Fire-and-forget: audit log only
   db.insert(auditLogs)
     .values({
       id: crypto.randomUUID(),
@@ -88,16 +88,20 @@ async function handleRequest(request: NextRequest, userId: string): Promise<Next
     })
     .catch(() => {});
 
-  sendNoteEmail({
-    driverName: data.driverName,
-    postcode: data.postcode,
-    what3words: data.what3words,
-    notes: data.notes,
-    fileName: data.fileName,
-    fileContent: rawFileContent,
-  }).catch((err) => {
+  // Await the email send — on Vercel the function is frozen/killed once the
+  // response returns, which aborts any in-flight (fire-and-forget) request.
+  try {
+    await sendNoteEmail({
+      driverName: data.driverName,
+      postcode: data.postcode,
+      what3words: data.what3words,
+      notes: data.notes,
+      fileName: data.fileName,
+      fileContent: rawFileContent,
+    });
+  } catch (err) {
     console.error('sendNoteEmail error:', err);
-  });
+  }
 
   return NextResponse.json({ id: noteId, ok: true });
 }
