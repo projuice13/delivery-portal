@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
 
   let role: 'driver' | 'office' | null = null;
 
-  if (normalisedUsername === 'driver' && password === process.env.DRIVER_PASSWORD) {
+  if (normalisedUsername === 'driver' && password === process.env.LOGIN_PASSWORD) {
     role = 'driver';
   } else if (normalisedUsername === 'office' && password === process.env.OFFICE_PASSWORD) {
     role = 'office';
