@@ -14,6 +14,14 @@ interface DriverNote {
   fileUrl: string;
   status: string;
   createdAt: string;
+  targetLibraryEntryId: string | null;
+}
+
+interface LibraryEntry {
+  id: string;
+  what3words: string;
+  notes: string;
+  companyName: string;
 }
 
 interface AdminApprovalListProps {
@@ -139,6 +147,7 @@ export function AdminApprovalList({ onLogout }: AdminApprovalListProps) {
 
           {notes.map(note => {
             const edit = getEdit(note);
+            const isEdit = Boolean(note.targetLibraryEntryId);
             return (
               <div key={note.id} className="bg-gray-50 border border-gray-200 rounded-[5px] overflow-hidden">
                 <div className="px-5 py-4 border-b border-gray-200 flex items-center justify-between">
@@ -148,26 +157,39 @@ export function AdminApprovalList({ onLogout }: AdminApprovalListProps) {
                       {note.driverName} &middot; {new Date(note.createdAt).toLocaleString('en-GB')}
                     </p>
                   </div>
-                  <span className="text-xs font-medium bg-yellow-50 text-yellow-700 px-2.5 py-1 rounded-full">Pending</span>
+                  <div className="flex items-center gap-2">
+                    {isEdit && (
+                      <span className="text-xs font-medium bg-blue-50 text-blue-700 px-2.5 py-1 rounded-full">Edit Request</span>
+                    )}
+                    <span className="text-xs font-medium bg-yellow-50 text-yellow-700 px-2.5 py-1 rounded-full">Pending</span>
+                  </div>
                 </div>
 
                 <div className="px-5 py-4 space-y-4">
-                  <div>
-                    <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">
-                      Company name <span className="text-gray-400 font-normal normal-case">(optional)</span>
-                    </label>
-                    <input
-                      type="text"
-                      value={edit.companyName}
-                      onChange={e => updateEdit(note.id, 'companyName', e.target.value, note)}
-                      placeholder="Leave blank for a general postcode note"
-                      className="w-full h-10 rounded-[5px] border border-gray-200 bg-white px-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition"
-                    />
-                  </div>
+                  {/* For edit requests: show original values for comparison */}
+                  {isEdit && note.targetLibraryEntryId && (
+                    <OriginalEntryPanel entryId={note.targetLibraryEntryId} />
+                  )}
+
+                  {/* Company name — only shown for new entries, not edits */}
+                  {!isEdit && (
+                    <div>
+                      <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">
+                        Company name <span className="text-gray-400 font-normal normal-case">(optional)</span>
+                      </label>
+                      <input
+                        type="text"
+                        value={edit.companyName}
+                        onChange={e => updateEdit(note.id, 'companyName', e.target.value, note)}
+                        placeholder="Leave blank for a general postcode note"
+                        className="w-full h-10 rounded-[5px] border border-gray-200 bg-white px-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition"
+                      />
+                    </div>
+                  )}
 
                   <div>
                     <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">
-                      What3Words
+                      {isEdit ? 'Proposed What3Words' : 'What3Words'}
                     </label>
                     <input
                       type="text"
@@ -179,7 +201,7 @@ export function AdminApprovalList({ onLogout }: AdminApprovalListProps) {
 
                   <div>
                     <label className="block text-xs font-semibold text-gray-400 uppercase tracking-wider mb-1.5">
-                      Notes
+                      {isEdit ? 'Proposed Notes' : 'Notes'}
                     </label>
                     <textarea
                       rows={4}
@@ -211,7 +233,7 @@ export function AdminApprovalList({ onLogout }: AdminApprovalListProps) {
                       disabled={actioning === note.id}
                       className="flex-1 h-10 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-[5px] transition cursor-pointer flex items-center justify-center gap-2"
                     >
-                      {actioning === note.id ? 'Working…' : 'Approve'}
+                      {actioning === note.id ? 'Working…' : (isEdit ? 'Approve Edit' : 'Approve')}
                     </button>
                     <button
                       onClick={() => handleReject(note)}
@@ -227,6 +249,42 @@ export function AdminApprovalList({ onLogout }: AdminApprovalListProps) {
           })}
         </div>
       </main>
+    </div>
+  );
+}
+
+function OriginalEntryPanel({ entryId }: { entryId: string }) {
+  const { data, isLoading } = useQuery<{ entry: LibraryEntry }>({
+    queryKey: ['library-entry', entryId],
+    queryFn: () => fetch(`/api/admin/library/${entryId}`, { credentials: 'include' }).then(r => r.json()),
+  });
+
+  if (isLoading) return <p className="text-xs text-gray-400">Loading original entry…</p>;
+  if (!data?.entry) return null;
+
+  const { entry } = data;
+
+  return (
+    <div className="rounded-[5px] border border-gray-200 bg-white p-4 space-y-3">
+      <p className="text-xs font-semibold text-gray-400 uppercase tracking-wider">Current entry (before edit)</p>
+      {entry.companyName && (
+        <div>
+          <p className="text-xs text-gray-400 mb-0.5">Company</p>
+          <p className="text-sm text-gray-700">{entry.companyName}</p>
+        </div>
+      )}
+      {entry.what3words && (
+        <div>
+          <p className="text-xs text-gray-400 mb-0.5">What3Words</p>
+          <p className="text-sm text-gray-700 font-mono">{entry.what3words}</p>
+        </div>
+      )}
+      {entry.notes && (
+        <div>
+          <p className="text-xs text-gray-400 mb-0.5">Notes</p>
+          <p className="text-sm text-gray-700 whitespace-pre-wrap">{entry.notes}</p>
+        </div>
+      )}
     </div>
   );
 }

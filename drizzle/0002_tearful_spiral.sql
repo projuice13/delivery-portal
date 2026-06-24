@@ -1,0 +1,1 @@
+ALTER TABLE "driver_notes" ADD COLUMN "target_library_entry_id" varchar;

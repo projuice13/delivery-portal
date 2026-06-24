@@ -8,12 +8,16 @@ const MAX_FILE_BYTES = 10 * 1024 * 1024;
 interface DriverNotesFormProps {
   postcode: string;
   onClose?: () => void;
+  targetLibraryEntryId?: string;
+  initialWhat3words?: string;
+  initialNotes?: string;
 }
 
-export function DriverNotesForm({ postcode, onClose }: DriverNotesFormProps) {
+export function DriverNotesForm({ postcode, onClose, targetLibraryEntryId, initialWhat3words, initialNotes }: DriverNotesFormProps) {
+  const isEditRequest = Boolean(targetLibraryEntryId);
   const [driverName, setDriverName] = useState('');
-  const [what3words, setWhat3words] = useState('');
-  const [notes, setNotes] = useState('');
+  const [what3words, setWhat3words] = useState(initialWhat3words ?? '');
+  const [notes, setNotes] = useState(initialNotes ?? '');
   const [file, setFile] = useState<File | null>(null);
   const [fileError, setFileError] = useState('');
   const [submitting, setSubmitting] = useState(false);
@@ -55,7 +59,7 @@ export function DriverNotesForm({ postcode, onClose }: DriverNotesFormProps) {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ driverName, postcode, what3words, notes, fileName, fileContent }),
+        body: JSON.stringify({ driverName, postcode, what3words, notes, fileName, fileContent, targetLibraryEntryId: targetLibraryEntryId ?? null }),
       });
       if (!res.ok) {
         setError('Failed to submit. Please try again.');
@@ -72,7 +76,7 @@ export function DriverNotesForm({ postcode, onClose }: DriverNotesFormProps) {
   if (success) {
     return (
       <div className="rounded-[5px] bg-green-50 border border-green-100 p-4 text-center space-y-2">
-        <p className="font-medium text-green-800">Note submitted successfully!</p>
+        <p className="font-medium text-green-800">{isEditRequest ? 'Edit request submitted!' : 'Note submitted successfully!'}</p>
         {onClose && (
           <button onClick={onClose} className="text-sm text-green-700 underline cursor-pointer">
             Close
@@ -116,11 +120,11 @@ export function DriverNotesForm({ postcode, onClose }: DriverNotesFormProps) {
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1.5">
-          Additional driver notes <span className="text-red-500">*</span>
+          {isEditRequest ? 'Updated notes' : 'Additional driver notes'} <span className="text-red-500">*</span>
         </label>
         <textarea
           rows={5}
-          placeholder="Enter any additional notes or observations about this delivery..."
+          placeholder={isEditRequest ? 'Describe the changes needed…' : 'Enter any additional notes or observations about this delivery...'}
           value={notes}
           onChange={e => setNotes(e.target.value)}
           required
@@ -154,7 +158,7 @@ export function DriverNotesForm({ postcode, onClose }: DriverNotesFormProps) {
             <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
             </svg>
-            Submit Notes
+            {isEditRequest ? 'Submit Edit Request' : 'Submit Notes'}
           </>
         )}
       </button>

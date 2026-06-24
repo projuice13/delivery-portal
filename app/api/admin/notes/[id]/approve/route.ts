@@ -31,17 +31,31 @@ export async function POST(
   const notesText: string = body.notes ?? note.notes;
   const what3words: string = body.what3words ?? note.what3words;
 
-  await db.insert(libraryEntries).values({
-    id: crypto.randomUUID(),
-    postcode: note.postcode,
-    companyName,
-    what3words,
-    notes: notesText,
-    image1Url: note.fileUrl ?? '',
-    image2Url: '',
-    source: 'driver-submission',
-    sourceNoteId: note.id,
-  });
+  if (note.targetLibraryEntryId) {
+    // Edit request — update the existing library entry
+    await db
+      .update(libraryEntries)
+      .set({
+        what3words,
+        notes: notesText,
+        ...(note.fileUrl ? { image1Url: note.fileUrl } : {}),
+        updatedAt: new Date(),
+      })
+      .where(eq(libraryEntries.id, note.targetLibraryEntryId));
+  } else {
+    // New entry — insert a fresh library row
+    await db.insert(libraryEntries).values({
+      id: crypto.randomUUID(),
+      postcode: note.postcode,
+      companyName,
+      what3words,
+      notes: notesText,
+      image1Url: note.fileUrl ?? '',
+      image2Url: '',
+      source: 'driver-submission',
+      sourceNoteId: note.id,
+    });
+  }
 
   await db
     .update(driverNotes)

@@ -66,6 +66,7 @@ function EntryCard({
   onImageClick: (url: string) => void;
 }) {
   const [showNotes, setShowNotes] = useState(false);
+  const [showEdit, setShowEdit] = useState(false);
 
   return (
     <div className="bg-gray-50 border border-gray-200 rounded-[5px] overflow-hidden">
@@ -141,10 +142,11 @@ function EntryCard({
           </Section>
         )}
 
-        {/* Add a note toggle — no border above */}
-        <div className="pt-0">
+        {/* Action buttons */}
+        <div className="pt-0 space-y-2">
+          {/* Add a note */}
           <button
-            onClick={() => setShowNotes(v => !v)}
+            onClick={() => { setShowNotes(v => !v); setShowEdit(false); }}
             className={`w-full h-10 rounded-[5px] border text-sm font-medium transition cursor-pointer flex items-center justify-center gap-2 ${
               showNotes
                 ? 'border-gray-200 text-gray-600 bg-transparent hover:bg-gray-100'
@@ -161,6 +163,37 @@ function EntryCard({
             <div className="mt-4">
               <DriverNotesForm postcode={postcode} onClose={() => setShowNotes(false)} />
             </div>
+          )}
+
+          {/* Suggest edit — only for library DB entries */}
+          {entry.libraryEntryId && (
+            <>
+              <button
+                onClick={() => { setShowEdit(v => !v); setShowNotes(false); }}
+                className={`w-full h-10 rounded-[5px] border text-sm font-medium transition cursor-pointer flex items-center justify-center gap-2 ${
+                  showEdit
+                    ? 'border-gray-200 text-gray-600 bg-transparent hover:bg-gray-100'
+                    : 'border-gray-300 text-gray-600 bg-transparent hover:bg-gray-100'
+                }`}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                </svg>
+                {showEdit ? 'Hide edit form' : 'Suggest an edit'}
+              </button>
+
+              {showEdit && (
+                <div className="mt-4">
+                  <DriverNotesForm
+                    postcode={postcode}
+                    onClose={() => setShowEdit(false)}
+                    targetLibraryEntryId={entry.libraryEntryId}
+                    initialWhat3words={entry.libraryWhat3words ?? ''}
+                    initialNotes={entry.libraryNotes ?? ''}
+                  />
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>

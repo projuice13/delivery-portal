@@ -11,6 +11,7 @@ export const driverNotes = pgTable('driver_notes', {
   fileContent: text('file_content').notNull().default(''),
   fileUrl: text('file_url').notNull().default(''),
   status: text('status').notNull().default('pending'), // 'pending' | 'approved' | 'rejected'
+  targetLibraryEntryId: varchar('target_library_entry_id'), // set when driver is editing an existing entry
   reviewedBy: varchar('reviewed_by'),
   reviewedAt: timestamp('reviewed_at'),
   createdAt: timestamp('created_at').defaultNow(),

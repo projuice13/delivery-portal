@@ -16,6 +16,7 @@ const NoteSchema = z.object({
   notes: z.string().min(1),
   fileName: z.string().default(''),
   fileContent: z.string().default(''),
+  targetLibraryEntryId: z.string().nullable().optional(),
 });
 
 export async function POST(request: NextRequest) {
@@ -93,6 +94,7 @@ async function handleRequest(request: NextRequest, userId: string): Promise<Next
     fileContent: '', // never stored
     fileUrl,
     status: 'pending',
+    targetLibraryEntryId: data.targetLibraryEntryId ?? null,
   });
 
   const ip = request.headers.get('x-forwarded-for') ?? '';

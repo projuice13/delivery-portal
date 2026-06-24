@@ -16,6 +16,9 @@ export interface DeliveryEntry {
   instructions: InstructionWithSource[];
   image1Url?: string;
   image2Url?: string;
+  libraryEntryId?: string; // present when entry originated from library_entries DB row
+  libraryNotes?: string;   // raw notes text for pre-filling edit form
+  libraryWhat3words?: string; // raw what3words for pre-filling edit form
 }
 
 export interface DeliveryData {

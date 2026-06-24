@@ -86,6 +86,13 @@ export async function lookupPostcode(postcode: string): Promise<DeliveryData | n
       instructions: [],
     };
 
+    // Track the library entry ID so the driver UI can offer "Suggest edit"
+    if (!existing.libraryEntryId) {
+      existing.libraryEntryId = row.id;
+      existing.libraryNotes = notes;
+      existing.libraryWhat3words = w3w;
+    }
+
     if (w3w && !existing.what3words.map(w => w.toLowerCase()).includes(w3w.toLowerCase())) {
       existing.what3words.push(w3w);
     }
