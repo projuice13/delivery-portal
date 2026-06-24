@@ -13,6 +13,10 @@ interface DeliveryInstructionsProps {
 
 export function DeliveryInstructions({ data, onBack }: DeliveryInstructionsProps) {
   const [lightboxUrl, setLightboxUrl] = useState<string | null>(null);
+  const [showNewEntry, setShowNewEntry] = useState(false);
+
+  // Does any entry on this postcode come from the library DB?
+  const hasLibraryEntries = data.entries.some(e => e.libraryEntryId);
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
@@ -50,6 +54,33 @@ export function DeliveryInstructions({ data, onBack }: DeliveryInstructionsProps
           {data.entries.map((entry, i) => (
             <EntryCard key={i} entry={entry} postcode={data.postcode} onImageClick={setLightboxUrl} />
           ))}
+
+          {/* Add new entry — shown below all cards when there are existing library entries */}
+          {hasLibraryEntries && (
+            <div className="bg-gray-50 border border-gray-200 rounded-[5px] overflow-hidden">
+              <div className="px-5 py-4">
+                <button
+                  onClick={() => setShowNewEntry(v => !v)}
+                  className={`w-full h-10 rounded-[5px] border text-sm font-medium transition cursor-pointer flex items-center justify-center gap-2 ${
+                    showNewEntry
+                      ? 'border-gray-200 text-gray-600 bg-transparent hover:bg-gray-100'
+                      : 'border-blue-600 bg-blue-600 text-white hover:bg-blue-700'
+                  }`}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className={`h-4 w-4 transition-transform ${showNewEntry ? 'rotate-45' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                  </svg>
+                  {showNewEntry ? 'Hide form' : 'Add a new entry for this postcode'}
+                </button>
+
+                {showNewEntry && (
+                  <div className="mt-4">
+                    <DriverNotesForm postcode={data.postcode} onClose={() => setShowNewEntry(false)} />
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
         </div>
       </main>
     </div>
@@ -67,6 +98,7 @@ function EntryCard({
 }) {
   const [showNotes, setShowNotes] = useState(false);
   const [showEdit, setShowEdit] = useState(false);
+  const isLibraryEntry = Boolean(entry.libraryEntryId);
 
   return (
     <div className="bg-gray-50 border border-gray-200 rounded-[5px] overflow-hidden">
@@ -142,38 +174,41 @@ function EntryCard({
           </Section>
         )}
 
-        {/* Action buttons */}
         <div className="pt-0 space-y-2">
-          {/* Add a note */}
-          <button
-            onClick={() => { setShowNotes(v => !v); setShowEdit(false); }}
-            className={`w-full h-10 rounded-[5px] border text-sm font-medium transition cursor-pointer flex items-center justify-center gap-2 ${
-              showNotes
-                ? 'border-gray-200 text-gray-600 bg-transparent hover:bg-gray-100'
-                : 'border-blue-600 bg-blue-600 text-white hover:bg-blue-700'
-            }`}
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" className={`h-4 w-4 transition-transform ${showNotes ? 'rotate-45' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-            </svg>
-            {showNotes ? 'Hide note' : 'Add a note'}
-          </button>
-
-          {showNotes && (
-            <div className="mt-4">
-              <DriverNotesForm postcode={postcode} onClose={() => setShowNotes(false)} />
-            </div>
-          )}
-
-          {/* Suggest edit — only for library DB entries */}
-          {entry.libraryEntryId && (
+          {/* Import-only entries keep "Add a note" */}
+          {!isLibraryEntry && (
             <>
               <button
-                onClick={() => { setShowEdit(v => !v); setShowNotes(false); }}
+                onClick={() => setShowNotes(v => !v)}
+                className={`w-full h-10 rounded-[5px] border text-sm font-medium transition cursor-pointer flex items-center justify-center gap-2 ${
+                  showNotes
+                    ? 'border-gray-200 text-gray-600 bg-transparent hover:bg-gray-100'
+                    : 'border-blue-600 bg-blue-600 text-white hover:bg-blue-700'
+                }`}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className={`h-4 w-4 transition-transform ${showNotes ? 'rotate-45' : ''}`} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                </svg>
+                {showNotes ? 'Hide note' : 'Add a note'}
+              </button>
+
+              {showNotes && (
+                <div className="mt-4">
+                  <DriverNotesForm postcode={postcode} onClose={() => setShowNotes(false)} />
+                </div>
+              )}
+            </>
+          )}
+
+          {/* Library entries get "Suggest an edit" only */}
+          {isLibraryEntry && (
+            <>
+              <button
+                onClick={() => setShowEdit(v => !v)}
                 className={`w-full h-10 rounded-[5px] border text-sm font-medium transition cursor-pointer flex items-center justify-center gap-2 ${
                   showEdit
                     ? 'border-gray-200 text-gray-600 bg-transparent hover:bg-gray-100'
-                    : 'border-gray-300 text-gray-600 bg-transparent hover:bg-gray-100'
+                    : 'border-blue-600 bg-blue-600 text-white hover:bg-blue-700'
                 }`}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
