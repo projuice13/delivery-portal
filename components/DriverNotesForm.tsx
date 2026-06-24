@@ -92,17 +92,22 @@ export function DriverNotesForm({ postcode, onClose, targetLibraryEntryId, initi
         <label className="block text-sm font-medium text-gray-700 mb-1.5">
           Driver name <span className="text-red-500">*</span>
         </label>
-        <select
-          value={driverName}
-          onChange={e => setDriverName(e.target.value)}
-          required
-          className="w-full h-10 rounded-[5px] border border-gray-200 bg-white px-3 pr-8 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition bg-[url('data:image/svg+xml;charset=utf-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 fill=%22none%22 viewBox=%220 0 20 20%22%3E%3Cpath stroke=%22%236B7280%22 stroke-linecap=%22round%22 stroke-linejoin=%22round%22 stroke-width=%221.5%22 d=%22M6 8l4 4 4-4%22/%3E%3C/svg%3E')] bg-[length:20px_20px] bg-[right_8px_center] bg-no-repeat appearance-none cursor-pointer"
-        >
-          <option value="">Please select</option>
-          {DRIVERS.map(d => (
-            <option key={d} value={d}>{d}</option>
-          ))}
-        </select>
+        <div className="relative">
+          <select
+            value={driverName}
+            onChange={e => setDriverName(e.target.value)}
+            required
+            className="w-full h-10 rounded-[5px] border border-gray-200 bg-white px-3 pr-8 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition appearance-none cursor-pointer"
+          >
+            <option value="">Please select</option>
+            {DRIVERS.map(d => (
+              <option key={d} value={d}>{d}</option>
+            ))}
+          </select>
+          <svg xmlns="http://www.w3.org/2000/svg" className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+          </svg>
+        </div>
       </div>
 
       <div>
