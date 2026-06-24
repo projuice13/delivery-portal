@@ -223,6 +223,7 @@ function EntryCard({
                     postcode={postcode}
                     onClose={() => setShowEdit(false)}
                     targetLibraryEntryId={entry.libraryEntryId}
+                    initialBusinessName={entry.companyName}
                     initialWhat3words={entry.libraryWhat3words ?? ''}
                     initialNotes={entry.libraryNotes ?? ''}
                   />

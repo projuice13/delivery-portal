@@ -11,12 +11,13 @@ interface DriverNotesFormProps {
   targetLibraryEntryId?: string;
   initialWhat3words?: string;
   initialNotes?: string;
+  initialBusinessName?: string;
 }
 
-export function DriverNotesForm({ postcode, onClose, targetLibraryEntryId, initialWhat3words, initialNotes }: DriverNotesFormProps) {
+export function DriverNotesForm({ postcode, onClose, targetLibraryEntryId, initialWhat3words, initialNotes, initialBusinessName }: DriverNotesFormProps) {
   const isEditRequest = Boolean(targetLibraryEntryId);
   const [driverName, setDriverName] = useState('');
-  const [businessName, setBusinessName] = useState('');
+  const [businessName, setBusinessName] = useState(initialBusinessName ?? '');
   const [what3words, setWhat3words] = useState(initialWhat3words ?? '');
   const [notes, setNotes] = useState(initialNotes ?? '');
   const [file, setFile] = useState<File | null>(null);
@@ -113,13 +114,14 @@ export function DriverNotesForm({ postcode, onClose, targetLibraryEntryId, initi
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1.5">
-          Business name <span className="text-gray-400 font-normal">(optional)</span>
+          Business name <span className="text-red-500">*</span>
         </label>
         <input
           type="text"
           placeholder="Business name, or customer name if residential"
           value={businessName}
           onChange={e => setBusinessName(e.target.value)}
+          required
           className="w-full h-10 rounded-[5px] border border-gray-200 bg-white px-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition"
         />
         <p className="mt-1 text-xs text-gray-400">If it&apos;s a residential address, please state the customer&apos;s name if possible.</p>
@@ -168,7 +170,7 @@ export function DriverNotesForm({ postcode, onClose, targetLibraryEntryId, initi
 
       <button
         type="submit"
-        disabled={submitting || !driverName || !notes}
+        disabled={submitting || !driverName || !businessName || !notes}
         className="w-full h-10 bg-blue-600 hover:bg-blue-700 disabled:bg-blue-300 disabled:cursor-not-allowed text-white text-sm font-medium rounded-[5px] transition flex items-center justify-center gap-2 cursor-pointer"
       >
         {submitting ? (

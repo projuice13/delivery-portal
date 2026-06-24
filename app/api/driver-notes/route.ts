@@ -11,7 +11,7 @@ import { sendNoteEmail } from '@/lib/email';
 
 const NoteSchema = z.object({
   driverName: z.string().min(1),
-  businessName: z.string().default(''),
+  businessName: z.string().min(1),
   postcode: z.string().min(1),
   what3words: z.string().default(''),
   notes: z.string().min(1),
