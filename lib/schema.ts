@@ -4,6 +4,7 @@ export const driverNotes = pgTable('driver_notes', {
   id: varchar('id').primaryKey().default('gen_random_uuid()'),
   driverId: varchar('driver_id'),
   driverName: text('driver_name').notNull(),
+  businessName: text('business_name').notNull().default(''),
   postcode: text('postcode').notNull(),
   what3words: text('what3words').notNull().default(''),
   notes: text('notes').notNull(),

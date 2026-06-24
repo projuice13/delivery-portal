@@ -16,6 +16,7 @@ interface DriverNotesFormProps {
 export function DriverNotesForm({ postcode, onClose, targetLibraryEntryId, initialWhat3words, initialNotes }: DriverNotesFormProps) {
   const isEditRequest = Boolean(targetLibraryEntryId);
   const [driverName, setDriverName] = useState('');
+  const [businessName, setBusinessName] = useState('');
   const [what3words, setWhat3words] = useState(initialWhat3words ?? '');
   const [notes, setNotes] = useState(initialNotes ?? '');
   const [file, setFile] = useState<File | null>(null);
@@ -59,7 +60,7 @@ export function DriverNotesForm({ postcode, onClose, targetLibraryEntryId, initi
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
-        body: JSON.stringify({ driverName, postcode, what3words, notes, fileName, fileContent, targetLibraryEntryId: targetLibraryEntryId ?? null }),
+        body: JSON.stringify({ driverName, businessName, postcode, what3words, notes, fileName, fileContent, targetLibraryEntryId: targetLibraryEntryId ?? null }),
       });
       if (!res.ok) {
         setError('Failed to submit. Please try again.');
@@ -108,6 +109,20 @@ export function DriverNotesForm({ postcode, onClose, targetLibraryEntryId, initi
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
           </svg>
         </div>
+      </div>
+
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-1.5">
+          Business name <span className="text-gray-400 font-normal">(optional)</span>
+        </label>
+        <input
+          type="text"
+          placeholder="Business name, or customer name if residential"
+          value={businessName}
+          onChange={e => setBusinessName(e.target.value)}
+          className="w-full h-10 rounded-[5px] border border-gray-200 bg-white px-3 text-sm outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-100 transition"
+        />
+        <p className="mt-1 text-xs text-gray-400">If it&apos;s a residential address, please state the customer&apos;s name if possible.</p>
       </div>
 
       <div>

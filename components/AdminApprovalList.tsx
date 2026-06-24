@@ -8,6 +8,7 @@ import { formatPostcode } from '@/lib/formatPostcode';
 interface DriverNote {
   id: string;
   driverName: string;
+  businessName: string;
   postcode: string;
   what3words: string;
   notes: string;
@@ -45,7 +46,7 @@ export function AdminApprovalList({ onLogout }: AdminApprovalListProps) {
   function getEdit(note: DriverNote) {
     return (
       editing[note.id] ?? {
-        companyName: '',
+        companyName: note.businessName ?? '',
         notes: note.notes,
         what3words: note.what3words,
       }

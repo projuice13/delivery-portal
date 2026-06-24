@@ -1,0 +1,1 @@
+ALTER TABLE "driver_notes" ADD COLUMN "business_name" text DEFAULT '' NOT NULL;
