@@ -1,4 +1,5 @@
 export const runtime = 'nodejs';
+export const maxDuration = 60;
 
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
@@ -27,7 +28,7 @@ export async function POST(request: NextRequest) {
   }
 
   const timeoutPromise = new Promise<NextResponse>((_, reject) =>
-    setTimeout(() => reject(new Error('timeout')), 30000)
+    setTimeout(() => reject(new Error('timeout')), 55000)
   );
 
   try {
