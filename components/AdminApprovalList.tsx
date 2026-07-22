@@ -127,16 +127,17 @@ export function AdminApprovalList({ onLogout, onViewLog }: AdminApprovalListProp
             <button
               onClick={onViewLog}
               className="text-sm text-gray-500 hover:text-gray-800 transition cursor-pointer"
-              title="Submissions log"
             >
-              Log
+              Change Log
             </button>
           )}
+          <span className="text-gray-200 select-none">|</span>
           <button
             onClick={onLogout}
-            className="text-gray-400 hover:text-gray-600 transition cursor-pointer"
+            className="flex items-center gap-1.5 text-sm text-gray-400 hover:text-gray-600 transition cursor-pointer"
             title="Log out"
           >
+            <span>Logout</span>
           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h6a2 2 0 012 2v1" />
           </svg>
