@@ -27,9 +27,10 @@ interface LibraryEntry {
 
 interface AdminApprovalListProps {
   onLogout: () => void;
+  onViewLog?: () => void;
 }
 
-export function AdminApprovalList({ onLogout }: AdminApprovalListProps) {
+export function AdminApprovalList({ onLogout, onViewLog }: AdminApprovalListProps) {
   const queryClient = useQueryClient();
   const [lightboxUrl, setLightboxUrl] = useState<string | null>(null);
   const [editing, setEditing] = useState<Record<string, { companyName: string; notes: string; what3words: string }>>({});
@@ -121,15 +122,26 @@ export function AdminApprovalList({ onLogout }: AdminApprovalListProps) {
 
       <header className="bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
         <Image src="/pj.png" alt="ProJuice" width={40} height={40} className="object-contain" />
-        <button
-          onClick={onLogout}
-          className="text-gray-400 hover:text-gray-600 transition cursor-pointer"
-          title="Log out"
-        >
+        <div className="flex items-center gap-3">
+          {onViewLog && (
+            <button
+              onClick={onViewLog}
+              className="text-sm text-gray-500 hover:text-gray-800 transition cursor-pointer"
+              title="Submissions log"
+            >
+              Log
+            </button>
+          )}
+          <button
+            onClick={onLogout}
+            className="text-gray-400 hover:text-gray-600 transition cursor-pointer"
+            title="Log out"
+          >
           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 pointer-events-none" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a2 2 0 01-2 2H5a2 2 0 01-2-2V7a2 2 0 012-2h6a2 2 0 012 2v1" />
           </svg>
-        </button>
+          </button>
+        </div>
       </header>
 
       <main className="flex-1 flex items-start justify-center px-4 py-8">

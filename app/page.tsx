@@ -8,6 +8,7 @@ import { DeliveryInstructions } from '@/components/DeliveryInstructions';
 import { MultipleDeliveryResults } from '@/components/MultipleDeliveryResults';
 import { NoResultsView } from '@/components/NoResultsView';
 import { AdminApprovalList } from '@/components/AdminApprovalList';
+import { SubmissionsLog } from '@/components/SubmissionsLog';
 import { VersionBanner } from '@/components/VersionBanner';
 import type { DeliveryData, DeliveryResult } from '@/lib/types';
 
@@ -17,7 +18,8 @@ type View =
   | 'driver-instructions'
   | 'multiple-results'
   | 'no-results'
-  | 'admin-approval';
+  | 'admin-approval'
+  | 'submissions-log';
 
 export default function Home() {
   const [view, setView] = useState<View>('login');
@@ -104,7 +106,7 @@ export default function Home() {
       )}
 
       {view === 'admin-approval' && (
-        <AdminApprovalList onLogout={handleLogout} />
+        <AdminApprovalList onLogout={handleLogout} onViewLog={() => setView('submissions-log')} />
       )}
 
       {view === 'driver-lookup' && (
@@ -112,6 +114,7 @@ export default function Home() {
           onLookup={handleLookup}
           onLogout={handleLogout}
           loading={lookupLoading}
+          onViewLog={() => setView('submissions-log')}
         />
       )}
 
@@ -133,6 +136,14 @@ export default function Home() {
         <NoResultsView
           postcode={noResultPostcode}
           onBack={() => setView('driver-lookup')}
+        />
+      )}
+
+      {view === 'submissions-log' && (
+        <SubmissionsLog
+          onBack={() => setView(user?.role === 'office' ? 'admin-approval' : 'driver-lookup')}
+          onLogout={handleLogout}
+          role={user?.role ?? 'driver'}
         />
       )}
 
