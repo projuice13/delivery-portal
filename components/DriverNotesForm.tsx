@@ -5,6 +5,34 @@ import { useState } from 'react';
 const DRIVERS = ['Andy', 'Dan', 'Ian', 'Karol', 'Lee', 'Marlon', 'Peter', 'Rafal', 'Shaun'];
 const MAX_FILE_BYTES = 10 * 1024 * 1024;
 
+// Compress image client-side using Canvas before sending.
+// Vercel has a 4.5MB request body limit; base64 adds ~33% overhead,
+// so we resize and compress to keep the payload well under that.
+async function compressImage(file: File): Promise<string> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      const MAX = 1200;
+      let { width, height } = img;
+      if (width > MAX || height > MAX) {
+        if (width > height) { height = Math.round(height * MAX / width); width = MAX; }
+        else { width = Math.round(width * MAX / height); height = MAX; }
+      }
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext('2d')!;
+      ctx.drawImage(img, 0, 0, width, height);
+      // ~0.7 quality JPEG keeps a 5MB phone photo under 300KB
+      resolve(canvas.toDataURL('image/jpeg', 0.7));
+    };
+    img.onerror = reject;
+    img.src = url;
+  });
+}
+
 interface DriverNotesFormProps {
   postcode: string;
   onClose?: () => void;
@@ -48,12 +76,17 @@ export function DriverNotesForm({ postcode, onClose, targetLibraryEntryId, initi
 
     if (file) {
       fileName = file.name;
-      fileContent = await new Promise<string>((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = () => resolve(reader.result as string);
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-      });
+      // Compress images before sending to stay within Vercel's 4.5MB body limit
+      if (file.type.startsWith('image/')) {
+        fileContent = await compressImage(file);
+      } else {
+        fileContent = await new Promise<string>((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = () => resolve(reader.result as string);
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
+        });
+      }
     }
 
     try {
@@ -156,7 +189,7 @@ export function DriverNotesForm({ postcode, onClose, targetLibraryEntryId, initi
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1.5">
-          Attachment <span className="text-gray-400 font-normal">(optional, max 10MB)</span>
+          Attachment <span className="text-gray-400 font-normal">(optional)</span>
         </label>
         <input
           type="file"
